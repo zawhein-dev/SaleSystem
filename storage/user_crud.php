@@ -38,6 +38,8 @@ function get_user_with_email($mysqli, $userEmail){
 }
 function get_user($mysqli){
     $sql = "SELECT * FROM `user`";
+    // $user = $mysqli->query($sql);
+    // return $user->fetch_assoc();
     return $mysqli->query($sql);
 } 
 function get_user_with_id($mysqli,$user_id){
@@ -47,5 +49,6 @@ function get_user_with_id($mysqli,$user_id){
 } 
 function delete_user($mysqli, $deleteId){
     $sql = "DELETE FROM `user` WHERE `user_id` = $deleteId";
+    
     return $mysqli->query($sql);
 }

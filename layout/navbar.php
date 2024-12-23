@@ -8,11 +8,10 @@ if (isset($_COOKIE['user'])) {
     if (isset($userData['user_id'])) {
         $user_id = $userData['user_id'];
         $currentUser =   get_user_with_id($mysqli, $user_id);
+       
     }
 }
-
 ?>
-
 <div class="container_fluid bg-white">
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
         <div class="container-fluid">
@@ -71,20 +70,28 @@ if (isset($_COOKIE['user'])) {
                         </ul>
                     </li>
                 </ul>
+                <form method="post">
                 <div class="dropdown">
                     <a class="navbar-brand dropdown-toggle" href="#" id="profileDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                         <img src="../assets/userProfile/<?= $currentUser['profile'] ?>" style="width: 60px; height: 60px; border-radius: 50%;" id="profileImage" alt="Image" class="ms-2">
                     </a>
-                    <form method="post"></form>
                     <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="profileDropdown">
                         <li><a class="dropdown-item" href="../user/profile.php">Profile</a></li>
-                        <li><a class="dropdown-item btn"  type="submit" name="logout" id="logout">Logout</a></li>
+                        <li>
+                            <button class="dropdown-item btn"  type="submit" name="logout">Logout</button>
+                           
+                        </li>
                     </ul>
-                    </form>
                 </div>
-
+                </form>
             </div>
         </div>
     </nav>
 
 </div>
+<?php
+if (isset($_POST['logout'])) {
+    setcookie("user", '', -1, "/");
+    header('Location:../index.php');
+}
+?>

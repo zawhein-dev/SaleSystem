@@ -29,7 +29,7 @@ function create_table($mysqli)
         return false;
     }
     
-    $sql = "CREATE TABLE IF NOT EXISTS `product`(`product_id` INT AUTO_INCREMENT,`product_name` VARCHAR(70) UNIQUE NOT NULL,price INT NOT NULL,`description` VARCHAR(225),category_id INT NOT NULL,PRIMARY KEY(`product_id`),FOREIGN KEY(`category_id`) REFERENCES `category`(`category_id`))";
+    $sql = "CREATE TABLE IF NOT EXISTS `product`(`product_id` INT AUTO_INCREMENT,`product_name` VARCHAR(70) UNIQUE NOT NULL,`photo` LONGTEXT NOT NULL,price INT NOT NULL,`description` VARCHAR(225),category_id INT NOT NULL,PRIMARY KEY(`product_id`),FOREIGN KEY(`category_id`) REFERENCES `category`(`category_id`))";
     if (!$mysqli->query($sql)) {
         return false;
     }

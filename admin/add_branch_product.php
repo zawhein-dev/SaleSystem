@@ -34,7 +34,17 @@ if(isset($_POST['submit'])){
         if(isset($_GET['branch_product_id'])){
                     $status = update_branch_product($mysqli,$branch,$product,$qty,$branch_product_id);
                 }else{
-                    $status = save_branch_product($mysqli,$branch,$product,$qty);
+                    $branch_product = check_prouct_in_branch_exist($mysqli,$product,$branch);
+                    // var_dump($branch_product['branch_product_id']);
+                    // $branch_product_id = $branch_product['branch_product_id'];
+                    if(!isset($branch_product['branch_product_id'])){
+                        $status = save_branch_product($mysqli,$branch,$product,$qty);
+                    }
+                    else
+                    {
+                        $branch_product_id = $branch_product['branch_product_id'];
+                        echo "<script>location.replace('./add_branch_product.php?duplicate&branch_product_id= $branch_product_id')</script>";
+                    }
                 }
 
         if ($status) {
@@ -47,11 +57,18 @@ if(isset($_POST['submit'])){
 ?>
 <div class="main  w-100 bg-white">
     <div class="main-content w-50 mx-auto">
-   <?php  if(isset($_GET['product_id'])){?>
+   <?php  if(isset($_GET['branch_product_id'])){?>
         <div class=" mx-auto mb-0 fs-4 my-1 text-center">Update Product in Branch</div>
         <?php } else { ?>
             <div class=" mx-auto mb-0 fs-4 my-1 text-center">Add Product to Branch</div>
             <?php } ?>
+            <?php if (isset($_GET['duplicate'])) { ?>
+                    <div id="autoCloseAlert" class="alert alert-sm mt-3 alert-warning alert-dismissible fade show" role="alert">
+                        <strong>Product in Branch already exists. So please update only qty in update section</strong>
+                        <button type="button" class="btn-sm btn-close close" data-bs-dismiss="alert" aria-label="Close">
+                        </button>
+                    </div>
+                <?php } ?>
         <form method="POST" class="form-group">
             <label for="product" class="form-label mb-1">Product</label>
             <select name="product" id="product" class="form-select form-select-sm">
@@ -80,8 +97,24 @@ if(isset($_POST['submit'])){
             
             <div class="form-input-group-sm text-center">
                 <input type="submit" value="Submit" name="submit" id="submit" class="btn btn-success">
+                <?php if(isset($_GET['duplicate']) && isset($_GET['branch_product_id'])) {
+                    $returnToUpdateWithBranchProductId = $_GET['branch_product_id'];
+                    ?>
+                    <a href="./add_branch_product.php?branch_product_id=<?= $returnToUpdateWithBranchProductId ?>" class="btn btn-success">Updete here</a>
+                <?php } ?> 
             </div>
         </form>
     </div>
 </div>
+<script>
+    setTimeout(function() {
+            var alertBox = document.getElementById('autoCloseAlert');
+            if (alertBox) {
+                alertBox.classList.remove('show'); 
+                setTimeout(function() {
+                    alertBox.remove();
+                }, 150);
+            }
+        }, 4000); 
+</script>
 <?php require_once("../layout/footer.php") ?>

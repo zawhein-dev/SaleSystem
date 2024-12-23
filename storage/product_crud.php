@@ -1,6 +1,6 @@
 <?php 
-function save_product($mysqli,$productName,$price,$description,$category){
-    $sql = "INSERT INTO `product` (`product_name`,`price`,`description`,`category_id`) VALUES ('$productName','$price','$description',$category)";
+function save_product($mysqli,$productName,$photo,$price,$description,$category){
+    $sql = "INSERT INTO `product` (`product_name`,`photo`,`price`,`description`,`category_id`) VALUES ('$productName','$photo','$price','$description',$category)";
     return $mysqli->query($sql);
 }
 function  get_product($mysqli){
@@ -16,9 +16,10 @@ function get_product_with_id($mysqli,$product_id){
     $product = $mysqli->query($sql);
     return $product->fetch_assoc();
 }
-function  update_product($mysqli,$productName,$price,$description,$category_id,$product_id){
+function  update_product($mysqli,$productName,$photo,$price,$description,$category_id,$product_id){
     $sql = "UPDATE `product` SET `product_name` = '$productName',
                                 `price` = $price,
+                                `photo` = '$photo',
                                 `description` = '$description',
                                 `category_id` = $category_id
                             WHERE `product_id`= $product_id";

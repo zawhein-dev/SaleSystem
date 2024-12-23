@@ -1,5 +1,10 @@
 <?php require_once("./storage/db.php"); ?>
-<?php require_once("./storage/user_crud.php"); ?>
+<?php require_once("./storage/user_crud.php"); 
+ require_once("./storage/order_product_crud.php");
+ require_once("./storage/order_detail_crud.php");  
+session_start();
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <?php
@@ -59,7 +64,26 @@ if($invalid){
         if (move_uploaded_file($fileTmpPath, $targetFilePath)) {
             $user = get_user_with_email($mysqli, $userEmail);
             setcookie("user", json_encode($user), time() + 60 * 60 * 24 * 30, "/");
-            header("Location:./home.php");
+            if(isset($_GET['order'])){
+             
+              if(save_order_product($mysqli,$user['user_id']))
+              {
+                $order_product_id = get_last_order_product_id($mysqli);
+                // var_dump($order_product_id['order_product_id']);
+                // var_dump($user['user_id']);
+                // var_dump($item_array);
+                
+                $item_array =  $_SESSION["item_list"];
+                foreach ($item_array as $index => $item) {
+                    $total = $item['qty'] * $item['price'];
+                        save_order_detail($mysqli,$order_product_id['order_product_id'], $item['branch_product_id'],$item['qty'],$total);
+                }
+                $_SESSION["item_list"] = [];
+                header("Location:./home.php");
+              }
+            }else{
+                header("Location:./index.php?user_id =".$user_id['user_id']);
+            }
             } 
     }else 
     {
@@ -80,6 +104,7 @@ if($invalid){
 </head>
 
 <body>
+
     <div class="card mx-auto w-50 mt-4">
         <div class="card-body">
             <h2 class="text-center">Register Form</h2>

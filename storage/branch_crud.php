@@ -28,6 +28,6 @@ function  delete_branch($mysqli, $deleteId){
     return $mysqli->query($sql);
 }
 function  get_product_in_branch($mysqli,$branch_id){
-    $sql = "SELECT bp.branch_product_id,p.product_id,`p`.`price`, `bp`.`qty`, `p`.`product_name`, `b`.`branch_name`, `b`.`address` FROM `branch_product` bp INNER JOIN `branch` b ON `bp`.`branch_id` = `b`.`branch_id` INNER JOIN `product` p ON  `bp`.`product_id` = `p`.`product_id` WHERE bp.`branch_id` = $branch_id";
+    $sql = "SELECT bp.branch_product_id,p.product_id,`p`.`photo`,`p`.`price`, `bp`.`qty`, `p`.`product_name`, `b`.`branch_name`, `b`.`address` FROM `branch_product` bp INNER JOIN `branch` b ON `bp`.`branch_id` = `b`.`branch_id` INNER JOIN `product` p ON  `bp`.`product_id` = `p`.`product_id` WHERE bp.`branch_id` = $branch_id";
     return $mysqli->query($sql);
 }

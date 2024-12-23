@@ -8,6 +8,11 @@ function save_branch_product($mysqli,$branch,$product,$qty): mixed{
         }
     }
 }
+function check_prouct_in_branch_exist($mysqli,$product_id,$branch_id){
+    $sql = "SELECT * FROM  `branch_product` WHERE `product_id` = $product_id AND `branch_id` = $branch_id";
+    $branch_product = $mysqli->query($sql);
+    return $branch_product->fetch_assoc();
+}
 
 function get_branch_product($mysqli){
     $sql = "SELECT * FROM `branch_product` INNER JOIN  `branch` ON `branch_product`.`branch_id` = `branch`.branch_id  INNER JOIN `product` ON `branch_product`.`product_id` = `product`.`product_id`";
@@ -34,3 +39,9 @@ function get_branch_product_for_order_detail($mysqli,$product_id,$branch_id){
     $branch_product = $mysqli->query($sql);
     return $branch_product->fetch_assoc();
 }
+
+function  save_branch_product_with_order($mysqli,$order_product_id,$branch_product_id,$price,$qty){
+    $sql = "INSERT INTO `order_detail`(`order_product_id`,`branch_product_id`,`qty`,`price`) VALUES($order_product_id,$branch_product_id,$price,$qty)";
+    return $mysqli->query($sql);
+}
+   

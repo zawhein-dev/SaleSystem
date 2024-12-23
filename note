@@ -1,0 +1,35 @@
+<div style="display: flex; align-items: center; justify-content: center; gap: 10px;">
+    <!-- Minus Button -->
+    <button type="button" onclick="updateQty(-1)" style="padding: 5px 10px;">-</button>
+
+    <!-- Quantity Display -->
+    <input type="text" id="quantity" value="1" readonly 
+           style="width: 40px; text-align: center; border: 1px solid #ccc; border-radius: 5px;">
+
+    <!-- Plus Button -->
+    <button type="button" onclick="updateQty(1)" style="padding: 5px 10px;">+</button>
+</div>
+
+<!-- Submit Button -->
+<a id="submitLink" href="#" style="display: block; text-align: center; margin-top: 10px;">Submit</a>
+
+<script>
+    function updateQty(change) {
+        const qtyInput = document.getElementById('quantity');
+        let currentQty = parseInt(qtyInput.value);
+        currentQty = isNaN(currentQty) ? 0 : currentQty;
+        let newQty = currentQty + change;
+
+        // Prevent quantity from going below 0
+        if (newQty < 0) newQty = 0;
+
+        qtyInput.value = newQty;
+    }
+
+    document.getElementById('submitLink').addEventListener('click', function () {
+        const qty = document.getElementById('quantity').value;
+        const url = `your_pos_page.php?quantity=${qty}`; // Replace with your page
+        window.location.href = url;
+    });
+</script>
+SELECT branch.branch_name, product.product_name,order_detail.price,(SELECT user_name FROM user WHERE user_id = 47) as userName,order_detail.qty  FROM `order_detail` inner join order_product on order_detail.order_product_id = order_product.order_product_id inner join branch_product on order_detail.branch_product_id =branch_product.branch_product_id INNER JOIN branch on branch_product.branch_id =branch.branch_id INNER join product on product.product_id = branch_product.product_id WHERE order_product.user_id = 47;

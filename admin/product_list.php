@@ -2,7 +2,20 @@
 <?php require_once("../layout/navbar.php");
  if (isset($_GET['deleteId'])) {
     $deleteId = $_GET['deleteId'];
-    delete_product($mysqli, $deleteId);
+    $selectPhoto = get_product_with_id($mysqli,$deleteId);
+    $path =  $selectPhoto['photo'];
+    if($path !== 'product.png')
+    $filePath = '../assets/product/' . $path;
+    
+        if (file_exists($filePath)) {
+            if (unlink($filePath)) {
+            delete_product($mysqli, $deleteId);
+            echo "<script>location.replace('./product_list.php')</script>";
+            }
+        } else{
+            delete_product($mysqli, $deleteId);
+            echo "<script>location.replace('./product_list.php')</script>";
+        }
 }; 
 
 ?>
@@ -32,6 +45,9 @@
                             <td class="align-content-center"><?= $i ?></td>
                             <td class="align-content-center"> <?= $product['product_name'] ?></td>
                             <td class="align-content-center"> <?= $product['price'] ?></td>
+                            <td class="align-content-center">
+                                <img src="../assets/product/<?= $product['photo'] ?>" alt="productPhoto" style="width: 80px; height: 80px; border-radius: 70px;">
+                            </td>
                             <td class="align-content-center"> <?= $product['description'] ?></td>
                             <td class="align-content-center"> <?= $product['category_name'] ?></td>
                              <td class="align-content-center">

@@ -1,0 +1,32 @@
+<div class="text-end me-4 mt-4">
+        <a href="./cart.php?" class="btn btn-success">Cart</a>
+    </div>
+    <?php if(isset($_GET['branch_id'])){
+         $branch_id = $_GET['branch_id'];
+     $branch = get_branch_with_id($mysqli,$branch_id);
+    ?>
+    <div class="text-center">
+            <span class="fs-2"> <?php echo $branch['branch_name']." Branch" ?></span>
+            <span class=" fs-4 ms-3"> <?= $branch['address']?></span>
+    </div>
+        <?php 
+         $product_in_branch = get_product_in_branch($mysqli,$branch_id);?>
+        <div class="container_fluid d-flex row">
+            <?php while($product = $product_in_branch->fetch_assoc()){ ?>
+                <div class="text-center col-3 mt-2">
+                    <div class="card mx-2 bg-light">
+                        <div class="">
+                            <div style="font-size: 25px;"><?= $product['product_name'] ?></div>
+                            <a href="./product_detail.php?product_id=<?= $product['product_id'] ?>&branch_id=<?= $branch_id ?>" style="text-decoration: none;">
+                            <div><img src="./assets/product/<?= $product['photo']?>" alt="" style="width: 400px; height: 200px;"></div>
+                            </a>
+                            <div class="justify-content-between d-flex">
+                                <div style="font-size: 19px; margin-right: 5px;"> <?php echo "In Stock ". $product['qty'] ?> </div>
+                                <div style="font-size: 19px;"> <?php echo $product['price']." MMK" ?> </div>
+                                    <a class="btn btn-sm" href="?product_id=<?= $product['product_id'] ?>&branch_id=<?= $branch_id ?>" style="width: 15rem; text-decoration: none;">Add to Cart</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            <?php }} ?>
+        </div>
