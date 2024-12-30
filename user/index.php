@@ -4,56 +4,65 @@ require_once("../auth/isLogin.php");
 require_once("../storage/user_crud.php");
 require_once("../storage/order_detail_crud.php");
 
-
 if (isset($_COOKIE['user'])) {
-    // Decode the JSON string into a PHP associative array
+
     $userData = json_decode($_COOKIE['user'], associative: true);
 
-    // Check if the 'username' key exists and display it
     if (isset($userData['user_id'])) {
         $user_id = $userData['user_id'];
         $currentUser =   get_user_with_id($mysqli, $user_id);
         $current_user_id = $currentUser['user_id'];
     }
 }
-// var_dump($currentUser['user_id']);
+
 ?>
-<div class="main bg-white">
-    <div class="content w-100">
-        <div class="card w-90 mt-2 mx-1">
-            <div class="card-title fs-3 text-center">User Order Detail</div>
-            <div class="card-body">
-                <table class="table table-striped  w-100 mx-auto">
-                    <thead>
-                        <tr>
-                            <th>No.</th>
-                            <th>Branch Name</th>
-                            <th>Product Name</th>
-                            <th>Total Price</th>
-                            <th>User Name</th>
-                            <th>Qty</th>
-                            <th>Status</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <?php $user_buying =   user_order_detail($mysqli,$current_user_id);
-                        $i= 1;
-                        // var_dump($user_buying->fetch_assoc());
-                            while($order_detail =$user_buying->fetch_assoc()){
-                        ?>
-                        <tr>
-                        <td><?= $i ?></td>
-                            <td><?= $order_detail['branch_name'] ?></td>
-                            <td><?= $order_detail['product_name'] ?></td>
-                            <td><?= $order_detail['price'] ?></td>
-                            <td><?= $order_detail['userName'] ?></td>
-                            <td><?= $order_detail['qty'] ?></td>
-                            <td><?php if($order_detail['status'] == 0) {echo 'Ordering';}else{echo 'taken';} ?></td>
-                            </tr>
-                        <?php $i++;}?>
-                    </tbody>
-                </table>
-            </div>
+<?php require_once("../userLayout/header.php");
+require_once("../auth/isLogin.php"); ?>
+<?php require_once("../userLayout/navbar.php") ?>
+<div class="content mt-4 mx-auto w-75">
+    <div class="card w-90 mt-2 mx-1">
+        <div class="card-title fs-3 text-center">User Order Detail</div>
+        <div class="card-body">
+            <table class="table table-striped  w-100 mx-auto">
+                <thead>
+                    <tr>
+                        <th>Order_Code</th>
+                        <th>User Name</th>
+                        <th>Order_date</th>
+                        <th>Status</th>
+                        <th>Detail</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php
+                     $order_product = get_order_detail_with_current_user($mysqli,$current_user_id);
+                    //  var_dump($order_product->fetch_assoc());
+                     while($user_order = $order_product->fetch_assoc()){
+                     ?>
+                     <tr>
+                        <td><?= "order_code_".$user_order['order_product_id'] ?></td>
+                        <td><?= $user_order['user_name']?></td>
+                        <td><?= $user_order['order_date']?></td>
+                        <td class="text-danger fw-bolder" style="width: 100px;">
+                                <?php if ($user_order['status'] == 0) {
+                                    echo 'On Hold';
+                                } else if ($user_order['status'] == 1){
+                                    echo 'Accepted';
+                                } else if ($user_order['status'] == 2){
+                                echo 'Ready'; 
+                                } else if ($user_order['status'] == 3){
+                                    echo "Cancel";
+                                }
+                                ?>
+                                </td>
+                                <td>
+                                    <a href="./user_order_list.php?order_product_id=<?= $user_order['order_product_id'] ?>" class="btn btn-sm btn-primary">Order Detail</a>
+                                </td>
+                     </tr>
+                     <?php  } ?>
+                </tbody>
+            </table>
         </div>
     </div>
 </div>
+<?php require_once("../userLayout/footer.php") ?>

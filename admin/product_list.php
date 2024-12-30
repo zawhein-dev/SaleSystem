@@ -17,7 +17,6 @@
             echo "<script>location.replace('./product_list.php')</script>";
         }
 }; 
-
 ?>
  
 <div class="main bg-white">

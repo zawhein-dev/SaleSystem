@@ -42,6 +42,7 @@ if (isset($_POST['submit'])) {
 
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -50,18 +51,19 @@ if (isset($_POST['submit'])) {
     <script src="./assets/js/bootstrap.min.js"></script>
     <script src="./assets/js/jquery.min.js"></script>
 </head>
+
 <body>
-  
-<div class="card mx-auto w-50 mt-4">
+
+    <div class="card mx-auto w-50 mt-4">
         <div class="card-body">
             <h2 class="text-center">Login Form</h2>
             <?php if (isset($_GET['invalid'])) { ?>
-                    <div class="alert alert-warning alert-dismissible fade show" role="alert">
-                        <strong><?= $_GET['invalid'] ?></strong>
-                        <button type="button" class=" btn-close close" data-bs-dismiss="alert" aria-label="Close">
-                        </button>
-                    </div>
-                <?php } ?>
+                <div class="alert alert-warning alert-dismissible fade show" role="alert">
+                    <strong><?= $_GET['invalid'] ?></strong>
+                    <button type="button" class=" btn-close close" data-bs-dismiss="alert" aria-label="Close">
+                    </button>
+                </div>
+            <?php } ?>
             <form method="post">
                 <div class="form-input-group mx-auto w-75">
                     <label for="userEmail" class="mb-2">Email address</label>
@@ -70,7 +72,7 @@ if (isset($_POST['submit'])) {
                 </div>
                 <div class="form-input-group mx-auto w-75">
                     <label for="password" class="mb-2">Password</label>
-                    <input name="password"  type="password" class="form-control" id="password" value="" placeholder="password">
+                    <input name="password" type="password" class="form-control" id="password" value="" placeholder="password">
                     <div style="height: 20px; line-height: 20px;"><i class="text-danger text-sm-start"><?= $passwordErr ?></i></div>
                 </div>
                 <div class="form-input-group mx-auto w-75">
@@ -87,7 +89,7 @@ if (isset($_POST['submit'])) {
                     <a>Don't have account?</a>
                     <a href="./register.php" class="btn fs-6 text-primary">Sign Up Here</a>
                 </div>
-            </form>  
+            </form>
         </div>
     </div>
     <script>
@@ -104,4 +106,5 @@ if (isset($_POST['submit'])) {
         })
     </script>
 </body>
+
 </html>

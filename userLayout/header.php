@@ -5,11 +5,10 @@ require_once("../auth/isLogin.php");
 <?php require_once("../storage/user_crud.php");?>
 <?php require_once("../storage/branch_crud.php");?>
 <?php require_once("../storage/category_crud.php");?>
-<?php require_once("../storage/product_crud.php");
- require_once("../storage/order_product_crud.php");
-
-require_once("../storage/order_detail_crud.php");?>
+<?php require_once("../storage/product_crud.php");?>
+<?php require_once("../storage/order_product_crud.php");?>
 <?php require_once("../storage/branch_product_crud.php");?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>

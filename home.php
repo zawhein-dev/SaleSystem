@@ -1,6 +1,5 @@
 <?php
 require_once("./auth/isLogin.php");
-
 // var_dump($user['role']);
 if($user['role'] == 1){
     header("Location:./admin/index.php");
