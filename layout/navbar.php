@@ -11,15 +11,14 @@ if (isset($_COOKIE['user'])) {
     }
     $numberOfOrderPending = count_order($mysqli);
 }
-
 ?>
 <div class="container_fluid bg-white">
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
         <div class="container-fluid ">
             <a class="navbar-brand mx-5 fw-bold" href="#">Anycall Mobile</a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <!-- <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
-            </button>
+            </button> -->
             <div class="collapse navbar-collapse ms-5" id="navbarSupportedContent">
                 <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                     <li class="nav-item dropdown mx-3">
@@ -83,7 +82,7 @@ if (isset($_COOKIE['user'])) {
                     </li>
                 </ul>
                 <form method="post">
-                    <div class="dropdown">
+                        <div class="dropdown">
                         <a class="navbar-brand dropdown-toggle" href="#" id="profileDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                             <img src="../assets/userProfile/<?= $currentUser['profile'] ?>" style="width: 60px; height: 60px; border-radius: 50%;" id="profileImage" alt="Image" class="ms-2">
                         </a>
@@ -91,7 +90,6 @@ if (isset($_COOKIE['user'])) {
                             <li><a class="dropdown-item" href="../user/profile.php">Profile</a></li>
                             <li>
                                 <button class="dropdown-item btn" type="submit" name="logout">Logout</button>
-
                             </li>
                         </ul>
                     </div>

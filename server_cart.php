@@ -11,10 +11,10 @@ $item_array = [];
 if (isset($_SESSION["item_list"])) {
     $item_array = $_SESSION['item_list'];
 }
-if (isset($_GET['product_id'])) {
+if (isset($_POST['product_id'])) {
 
-    $product_id = $_GET['product_id'];
-    $branch_id = $_GET['branch_id'];
+    $product_id = $_POST['product_id'];
+    $branch_id = $_POST['branch_id'];
     $branch_product = get_branch_product_for_order_detail($mysqli, $product_id, $branch_id);
     $isHave = true;
     $addtocart = true;
@@ -34,5 +34,8 @@ if (isset($_GET['product_id'])) {
         array_push($item_array, ['product_id' => $branch_product['product_id'], 'branch_product_id' => $branch_product['branch_product_id'], 'product_name' => $branch_product['product_name'], 'price' => $branch_product['price'], 'branch_name' => $branch_product['branch_name'], 'qty' => 1]);
     }
     $_SESSION["item_list"] = $item_array;
-    header("Location:?branch_id=$branch_id");
+    // header("Location:?branch_id=$branch_id");
+    header("Location: " . $_SERVER['PHP_SELF'] . "?branch_id=$branch_id&show_offcanvas=true");
+// exit;
+
 }

@@ -149,8 +149,12 @@ if (isset($_GET['order'])) {
             <?php } else { ?>
                 <div>There is no product in cart</div>
         <?php }
-        } ?>
+        }  else { ?>
+                <div>There is no product in cart</div>
+        <?php } ?>
     </div>
 </body>
 
 </html>
+
+            
