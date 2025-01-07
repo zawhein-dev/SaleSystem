@@ -13,6 +13,23 @@ function get_branch($mysqli)
     $sql = "SELECT * FROM `branch`";
     return $mysqli->query($sql);
 }
+function get_branch_with_search_data($mysqli, $search)
+{
+    $sql = "SELECT * FROM `branch` WHERE `branch_name` LIKE '%$search%'";
+    return $mysqli->query($sql);
+}
+
+function get_search_branch_with_offset($mysqli, $offset, $limit)
+{
+    $sql = "SELECT * FROM branch LIMIT $limit OFFSET $offset";
+    return $mysqli->query($sql);
+
+}
+function get_branch_with_offset($mysqli, $offset, $limit,$search)
+{
+    $sql = "SELECT * FROM `branch`  WHERE `branch_name` LIKE '%$search%' LIMIT $limit OFFSET $offset";
+    return $mysqli->query($sql);
+}
 function get_branch_with_id($mysqli, $branch_id)
 {
     $sql = "SELECT * FROM `branch` WHERE `branch_id` = $branch_id";
@@ -34,6 +51,36 @@ function  delete_branch($mysqli, $deleteId)
 }
 function  get_product_in_branch($mysqli, $branch_id)
 {
-    $sql = "SELECT bp.branch_product_id,p.product_id,`p`.`photo`,`p`.`price`, `bp`.`qty`, `p`.`product_name`, `b`.`branch_name`, `b`.`address` FROM `branch_product` bp INNER JOIN `branch` b ON `bp`.`branch_id` = `b`.`branch_id` INNER JOIN `product` p ON  `bp`.`product_id` = `p`.`product_id` WHERE bp.`branch_id` = $branch_id";
+    $sql = "SELECT bp.branch_product_id,p.product_id,`p`.`photo`,`p`.`price`, `bp`.`qty`, `p`.`product_name`, `b`.`branch_name`, `b`.`address`
+    FROM `branch_product` bp 
+    INNER JOIN `branch` b ON `bp`.`branch_id` = `b`.`branch_id` 
+    INNER JOIN `product` p ON  `bp`.`product_id` = `p`.`product_id` WHERE bp.`branch_id` = $branch_id";
     return $mysqli->query($sql);
+}
+function get_product_in_branch_with_search_data($mysqli, $search,$branch_id)
+{
+    $sql = "SELECT bp.branch_product_id,p.product_id,`p`.`photo`,`p`.`price`, `bp`.`qty`, `p`.`product_name`, `b`.`branch_name`, `b`.`address`
+    FROM `branch_product` bp
+    INNER JOIN `branch` b ON `bp`.`branch_id` = `b`.`branch_id` 
+    INNER JOIN `product` p ON  `bp`.`product_id` = `p`.`product_id` 
+    WHERE (bp.`branch_id` = $branch_id) and p.`product_name` LIKE '%$search%'";
+    return $mysqli->query($sql);
+}
+function get_product_in_branch_with_offset($mysqli, $offset, $limit,$search,$branch_id)
+{
+    $sql = "SELECT bp.branch_product_id,p.product_id,`p`.`photo`,`p`.`price`, `bp`.`qty`, `p`.`product_name`, `b`.`branch_name`, `b`.`address`
+    FROM `branch_product` bp
+    INNER JOIN `branch` b ON `bp`.`branch_id` = `b`.`branch_id` 
+    INNER JOIN `product` p ON  `bp`.`product_id` = `p`.`product_id`
+    WHERE (bp.`branch_id` = $branch_id) and p.`product_name` LIKE '%$search%' LIMIT $limit OFFSET $offset";
+    return $mysqli->query($sql);
+}
+function get_search_product_in_branch_with_offset($mysqli, $offset, $limit,$branch_id)
+{
+    $sql = "SELECT bp.branch_product_id,p.product_id,`p`.`photo`,`p`.`price`, `bp`.`qty`, `p`.`product_name`, `b`.`branch_name`, `b`.`address`
+    FROM branch_product bp
+    INNER JOIN `branch` b ON `bp`.`branch_id` = `b`.`branch_id` 
+    INNER JOIN `product` p ON  `bp`.`product_id` = `p`.`product_id`
+    WHERE (bp.`branch_id` = $branch_id)  LIMIT $limit OFFSET $offset";
+    return $mysqli->query($sql);        
 }

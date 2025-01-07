@@ -25,6 +25,23 @@ Order BY order_product.order_date DESC";
     $sql = "SELECT * FROM `order_product` INNER JOIN `user` ON `order_product`.`user_id` = `user`.`user_id`";
     return $mysqli->query($sql);
  }
+ function get_order_product_with_search_data($mysqli, $search)
+{
+    $sql = "SELECT * FROM `order_product` INNER JOIN `user` ON `order_product`.`user_id` = `user`.`user_id` WHERE `user`.`user_name`  LIKE '%$search%'";
+    return $mysqli->query($sql);
+}
+
+function get_search_order_product_with_offset($mysqli, $offset, $limit)
+{
+    $sql = "SELECT * FROM order_product INNER JOIN `user` ON `order_product`.`user_id` = `user`.`user_id`  LIMIT $limit OFFSET $offset";
+    return $mysqli->query($sql);
+
+}
+function get_order_product_with_offset($mysqli, $offset, $limit,$search)
+{
+    $sql = "SELECT * FROM `order_product` INNER JOIN `user` ON `order_product`.`user_id` = `user`.`user_id`  WHERE `user`.`user_name` LIKE '%$search%' LIMIT $limit OFFSET $offset";
+    return $mysqli->query($sql);
+}
  function pending_order_status($mysqli,$order_detail_id){
     $sql = "UPDATE `order_detail` SET `status`= 0  WHERE `order_detail_id` = $order_detail_id";
     return $mysqli->query($sql);
@@ -65,10 +82,7 @@ INNER JOIN product ON branch_product.product_id = product.product_id
 INNER JOIN category ON product.category_id = category.category_id
 WHERE order_product.user_id = $current_user_id AND order_product.order_product_id = $order_product_id";
 return $mysqli->query($sql);}
-function get_order_detail_with_current_user($mysqli,$current_user_id){
-    $sql = "SELECT * FROM order_product INNER JOIN user ON order_product.user_id = user.user_id WHERE user.user_id = $current_user_id";
-    return $mysqli->query($sql);
-}
+
 function get_order_onhold_with_current_user($mysqli,$current_user_id){
     $sql = "SELECT * FROM order_product INNER JOIN user ON order_product.user_id = user.user_id WHERE user.user_id = $current_user_id AND order_product.status = 0";
     return $mysqli->query($sql);
@@ -101,5 +115,32 @@ function update_branch_product_when_order_cancel($mysqli,$update_branch_product_
 }
 function update_branch_product_when_order_cancel_with_minus($mysqli,$update_branch_product_data,$update_branch_product_qty){
     $sql = "UPDATE branch_product SET qty = qty - $update_branch_product_qty WHERE branch_product_id = $update_branch_product_data";
+    return $mysqli->query($sql);
+}
+
+function get_order_detail_with_current_user($mysqli,$current_user_id){
+    $sql = "SELECT * FROM order_product INNER JOIN user ON order_product.user_id = user.user_id WHERE user.user_id = $current_user_id";
+    return $mysqli->query($sql);
+}
+function get_order_detail_with_current_user_with_search_data($mysqli, $search,$current_user_id)
+{
+    $sql = "SELECT * FROM `order_product` 
+    INNER JOIN user ON order_product.user_id = user.user_id
+    WHERE order_product.`order_product_id` LIKE '%$search%' AND user.user_id = $current_user_id";
+    return $mysqli->query($sql);
+}
+function get_order_detail_with_current_user_with_offset($mysqli, $offset, $limit,$search,$current_user_id)
+{
+    $sql = "SELECT * FROM `order_product`  
+    INNER JOIN user ON order_product.user_id = user.user_id
+    WHERE order_product.`order_product_id` LIKE '%$search%' AND user.user_id = $current_user_id LIMIT $limit OFFSET $offset";
+    return $mysqli->query($sql);
+}
+function get_search_order_detail_with_current_user_with_offset($mysqli, $offset, $limit,$current_user_id)
+{
+    $sql = "SELECT * FROM order_product
+    INNER JOIN user ON order_product.user_id = user.user_id
+    WHERE user.user_id = $current_user_id
+     LIMIT $limit OFFSET $offset";
     return $mysqli->query($sql);
 }

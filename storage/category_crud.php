@@ -11,6 +11,23 @@ function get_category_with_id($mysqli, $category_id)
     $category = $mysqli->query($sql);
     return $category->fetch_assoc();
 }
+
+function get_category_with_search_data($mysqli, $search)
+{
+    $sql = "SELECT * FROM `category` WHERE `category_name` LIKE '%$search%'";
+    return $mysqli->query($sql);
+}
+
+function get_category_with_offset($mysqli, $offset, $limit,$search)
+{
+    $sql = "SELECT * FROM `category`  WHERE `category_name` LIKE '%$search%' LIMIT $limit OFFSET $offset";
+    return $mysqli->query($sql);
+}
+function get_search_category_with_offset($mysqli, $offset, $limit)
+{
+    $sql = "SELECT * FROM category LIMIT $limit OFFSET $offset";
+    return $mysqli->query($sql);
+}
 function update_category($mysqli, $categoryName, $description, $category_id)
 {
     $sql = "UPDATE `category` SET `category_name` = '$categoryName',

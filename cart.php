@@ -4,11 +4,24 @@ require_once("./storage/branch_product_crud.php");
 require_once("./storage/order_product_crud.php");
 require_once("./storage/order_detail_crud.php");
 require_once("./storage/product_crud.php");
+require_once("./storage/branch_crud.php");
+require_once("./storage/user_crud.php");
 
 session_start();
+if (isset($_COOKIE['user'])) {
+    // Decode the JSON string into a PHP associative array
+    $userData = json_decode($_COOKIE['user'], associative: true);
+  
+    // Check if the 'username' key exists and display it
+    if (isset($userData['user_id'])) {
+      $user_id = $userData['user_id'];
+      $currentUser = get_user_with_id($mysqli, $user_id);
+    }
+  }
 if (isset($_GET['branch_id'])) {
     $branch_id = $_GET['branch_id'];
-}
+    $branch = get_branch_with_id($mysqli, $branch_id);
+  }
 if (isset($_GET['add'])) {
     $index = $_GET['add'];
     $item_array = $_SESSION["item_list"];
@@ -73,18 +86,81 @@ if (isset($_GET['order'])) {
 ?>
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Cart</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet" />
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous" />
+  <!--  -->
+  <link rel="stylesheet" href="./assets/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
+    integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg=="
+    crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"
+    integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g=="
+    crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
     <link rel="stylesheet" href="./assets/css/bootstrap.min.css">
     <script src="./assets/js/bootstrap.min.js"></script>
     <script src="./assets/js/jquery.min.js"></script>
 </head>
-
-<body class="bg-light">
-    <div class="container-fluid row  mx-auto mt-3">
+<body class="bg-white">
+    <nav class="navbar navbar-expand-lg bg-light">
+    <div class="container">
+      <a class="navbar-brand fw-bolder" href="./index.php"><?php echo $branch['branch_name'] . " Branch" ?></a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent"
+        aria-controls="navbarContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse justify-content-end" id="navbarContent">
+        <!-- <form class="d-flex mx-auto w-50" role="search" method="get">
+          <input type="hidden" value=" _GET['branch_id'] " name = "branch_id">
+          <!-- <input type="hidden" value="category_id from php ?>" name="search_category_id"> 
+           <input class="form-control me-2" name="search_data" type="text" placeholder="Search" aria-label="Search" /> 
+          <button class="btn btn-outline-success" name="search">
+            <i class="bi bi-search"></i>
+          </button>
+        </form>  -->
+        <div class="d-flex align-items-center">
+          <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+            <!-- <li class="nav-item position-relative mt-2 me-3">
+              <a class="nav-link" href="./cart.php?branch_id=<?= $_GET['branch_id'] ?>">
+                <i class="bi bi-cart fs-4"></i>
+                <span class="position-absolute top-2 start-100 translate-middle badge rounded-pill bg-danger">
+                 
+                   7
+                </span>
+              </a>
+            </li> -->
+            <li class="nav-item">
+              <a class="nav-link" href="#">
+                <span class="d-flex">
+                  <span class="<?php if (isset($currentUser)) { echo "nav-link"; } ?>">
+                    <?php if (isset($currentUser)) {
+                      echo "<span class='mt-4'>".$currentUser['user_name']."</span>";
+                    } else {
+                   echo "<a href='./login.php' class='btn btn-sm btn-success mb-2'>Login</a>";
+                    } ?> 
+                  </span>
+                  <span>
+                    <?php if (isset($currentUser)) { ?>
+                      <img src="./assets/userProfile/<?= $currentUser['profile'] ?>"
+                        style="width: 50px; height: 50px; border-radius: 50%;" id="profileImage" alt="Image">
+                    <?php } else {
+                       echo "<a href='./register.php' class='btn btn-sm btn-info mb-2'>Register</a>";
+                   } ?>
+                  </span>
+                </span>
+              </a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </nav>
+    <div class="container-fluid row  mx-auto mt-1">
         <?php if (isset($_SESSION["item_list"])) {
             $item_array =  $_SESSION["item_list"];
             if (count($item_array) > 0) { ?>
@@ -109,7 +185,7 @@ if (isset($_GET['order'])) {
                                     <td><?= $item['product_name'] ?></td>
                                     <td>
                                         <a href="?minus=<?= $index ?>&branch_id=<?= $branch_id ?>" class="btn btn-sm btn-success">-</i></a>
-                                        <input type="text" class="btn btn-sm bg-light w-25" value="<?= $item['qty'] ?>">
+                                        <input type="number" readonly class="btn btn-sm bg-light w-25" value="<?= $item['qty'] ?>">
                                         <a href="?add=<?= $index ?>&branch_id=<?= $branch_id ?>" class="btn btn-sm btn-primary">+</i></a>
                                         <a href="?remove=<?= $index ?>&branch_id=<?= $branch_id ?>" class="btn btn-sm btn-danger">X</a>
                                     </td>
@@ -123,7 +199,7 @@ if (isset($_GET['order'])) {
                 </div>
                 <div class="col-4 mt-5">
                     <div class="card">
-                        <div class="card-header">
+                        <div class="card-header"> 
                             <div class="card-title fs-4">Cart Total</div>
                         </div>
                         <div class="card-body">
@@ -131,10 +207,10 @@ if (isset($_GET['order'])) {
                                 <div class="card-text fw-bold ">Subtotal</div>
                                 <div class="card-text fw-medium "><?= $net_total . " MMK" ?></div>
                             </div>
-                            <div class="d-flex justify-content-between p-3 mt-2 mb-2 border-bottom">
+                            <!-- <div class="d-flex justify-content-between p-3 mt-2 mb-2 border-bottom">
                                 <div class="card-text fw-bold">Shipping</div>
                                 <div class="card-text fw-medium"><?= "1000 MMK" ?></div>
-                            </div>
+                            </div> -->
                             <div class="d-flex justify-content-between p-3 mt-2 mb-2">
                                 <div class="card-text mb-0 fw-bold fs-5">Total</div>
                                 <div class="card-text fw-medium "><?= $net_total . " MMK" ?></div>
@@ -153,6 +229,9 @@ if (isset($_GET['order'])) {
                 <div>There is no product in cart</div>
         <?php } ?>
     </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+    crossorigin="anonymous"></script>
 </body>
 
 </html>

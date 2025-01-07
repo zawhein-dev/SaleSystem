@@ -42,7 +42,6 @@ if (isset($_COOKIE['user'])) {
                             <li><a class="dropdown-item" href="../admin/user_list.php">User List</a></li>
                         </ul>
                     </li>
-
                     <li class="nav-item dropdown  mx-3">
                         <a class="nav-link" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                             Category
@@ -52,7 +51,6 @@ if (isset($_COOKIE['user'])) {
                             <li><a class="dropdown-item" href="../admin/category_list.php">Category List</a></li>
                         </ul>
                     </li>
-
                     <li class="nav-item dropdown  mx-3">
                         <a class="nav-link" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                             Product
@@ -79,6 +77,14 @@ if (isset($_COOKIE['user'])) {
                             <li><a class="dropdown-item" href="../admin/add_branch_product.php">Add Product in Branch</a></li>
                             <li><a class="dropdown-item" href="../admin/branch_product_list.php">Product in Branch List</a></li>
                         </ul>
+                    </li>
+                    <li class="nav-item dropdown  mx-3">
+                        <form action="" class="form-input-group" method="get">
+                            <input type="text"  name="search_data" placeholder="Search..." class="search-input">
+                            <button class="search-btn" name="search">
+                                <i class="fas fa-search"></i>
+                            </button>
+                        </form>
                     </li>
                 </ul>
                 <form method="post">

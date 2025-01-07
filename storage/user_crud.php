@@ -46,6 +46,21 @@ function get_user($mysqli)
     // return $user->fetch_assoc();
     return $mysqli->query($sql);
 }
+function get_user_with_search_data($mysqli, $search)
+{
+    $sql = "SELECT * FROM `user` WHERE `user_name` LIKE '%$search%'";
+    return $mysqli->query($sql);
+}
+function get_user_with_offset($mysqli, $offset, $limit,$search)
+{
+    $sql = "SELECT * FROM `user`  WHERE `user_name` LIKE '%$search%' LIMIT $limit OFFSET $offset";
+    return $mysqli->query($sql);
+}
+function get_search_user_with_offset($mysqli, $offset, $limit)
+{
+    $sql = "SELECT * FROM user LIMIT $limit OFFSET $offset";
+    return $mysqli->query($sql);
+}
 function get_user_with_id($mysqli, $user_id)
 {
     $sql = "SELECT * FROM `user` WHERE `user_id` = $user_id";

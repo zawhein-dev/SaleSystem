@@ -21,7 +21,6 @@ if (isset($_COOKIE['user'])) {
             </button>
             <div class="collapse navbar-collapse ms-5" id="navbarSupportedContent">
                 <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-
                     <li class="nav-item dropdown mx-3">
                         <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                            Order
@@ -43,6 +42,16 @@ if (isset($_COOKIE['user'])) {
                             <li><a class="dropdown-item" href="../user/change_password.php">Change Password</a></li>
                         </ul>
                     </li>
+                    <li class="nav-item dropdown  mx-3">
+                        <form action="" class="form-input-group" method="get">
+                            <div class="d-flex">
+                            <input type="text"  name="search_data" placeholder="Search..." class="search-input form-control">
+                            <button class="search-btn btn btn-light border-info" name="search" type="submit">
+                                <i class="fas fa-search"></i>
+                            </button>
+                            </div>
+                        </form>
+                    </li>
                 </ul>
                 <form method="post">
                 <div class="dropdown">
@@ -53,7 +62,6 @@ if (isset($_COOKIE['user'])) {
                         <li><a class="dropdown-item" href="../user/profile.php">Profile</a></li>
                         <li>
                             <button class="dropdown-item btn"  type="submit" name="logout">Logout</button>
-                           
                         </li>
                     </ul>
                 </div>

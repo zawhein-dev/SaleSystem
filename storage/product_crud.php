@@ -9,6 +9,22 @@ function  get_product($mysqli)
     $sql = "SELECT * FROM `product` INNER JOIN `category` ON `product`.`category_id` = `category`.`category_id`";
     return $mysqli->query($sql);
 }
+function get_product_with_search_data($mysqli, $search)
+{
+    $sql = "SELECT * FROM `product` INNER JOIN `category` ON `product`.`category_id` = `category`.`category_id` WHERE `product_name` LIKE '%$search%'";
+    return $mysqli->query($sql);
+}
+function get_product_with_offset($mysqli, $offset, $limit,$search)
+{
+    $sql = "SELECT * FROM `product` INNER JOIN `category` ON `product`.`category_id` = `category`.`category_id`  WHERE `product_name` LIKE '%$search%' LIMIT $limit OFFSET $offset";
+    return $mysqli->query($sql);
+}
+function get_search_product_with_offset($mysqli, $offset, $limit)
+{
+    $sql = "SELECT * FROM product INNER JOIN `category` ON `product`.`category_id` = `category`.`category_id` LIMIT $limit OFFSET $offset";
+    return $mysqli->query($sql);
+
+}
 function delete_product($mysqli, $deleteId)
 {
     $sql = "DELETE FROM `product` WHERE `product_id` = $deleteId";

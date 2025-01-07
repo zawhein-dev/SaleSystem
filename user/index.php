@@ -14,7 +14,23 @@ if (isset($_COOKIE['user'])) {
         $current_user_id = $currentUser['user_id'];
     }
 }
-
+$limit = 3;
+$page = isset($_GET['pageNo']) ? intval($_GET['pageNo']) : 1;
+$offset = ($page - 1) * $limit;
+$numberTitle = ($page * $limit) - $limit;
+    if (isset($_GET['search_data'])) {
+            $searchData = $_GET['search_data'];
+            $row =  get_order_detail_with_current_user_with_search_data($mysqli, $searchData,$current_user_id);
+            $row_count = COUNT($row->fetch_all());
+            $pagination_link = ceil($row_count / 3); 
+            $order_product = get_order_detail_with_current_user_with_offset($mysqli, $offset, $limit,$searchData,$current_user_id);
+    }else{
+        // $row = get_user($mysqli);
+        $row = get_order_detail_with_current_user($mysqli,$current_user_id);
+        $row_count  = COUNT($row->fetch_all()); //get number of users
+        $pagination_link = ceil($row_count / 3);
+        $order_product = get_search_order_detail_with_current_user_with_offset($mysqli, $offset, $limit,$current_user_id);
+    }
 ?>
 <?php require_once("../userLayout/header.php");
 require_once("../auth/isLogin.php"); ?>
@@ -35,7 +51,7 @@ require_once("../auth/isLogin.php"); ?>
                 </thead>
                 <tbody>
                     <?php
-                     $order_product = get_order_detail_with_current_user($mysqli,$current_user_id);
+                    //  $order_product = get_order_detail_with_current_user($mysqli,$current_user_id);
                     //  var_dump($order_product->fetch_assoc());
                      while($user_order = $order_product->fetch_assoc()){
                      ?>
@@ -62,6 +78,25 @@ require_once("../auth/isLogin.php"); ?>
                      <?php  } ?>
                 </tbody>
             </table>
+            <?php if (!($row_count <= $limit)) { ?>
+                    <nav>
+                        <ul class="pagination justify-content-center">
+                            <li class="page-item <?php if ($page <= 1) echo 'disabled' ?>">
+                                <a class="page-link" href="?pageNo=<?= $page - 1; ?>&search_data=<?= isset($searchData) ? urlencode($searchData) : ''; ?>">Previous</a>
+                            </li>
+                            <?php $j = 1;
+                            while ($pagination_link >= $j) { ?>
+                                <li class="page-item">
+                                    <a class="page-link <?php if ($page == $j) echo 'active' ?>" href="?pageNo=<?= $j ?>&search_data=<?= isset($searchData) ? urlencode($searchData) : ''; ?>"><?php echo $j; ?></a>
+                                </li>
+                            <?php $j++;
+                            } ?>
+                            <li class="page-item <?php if ($pagination_link == $page) echo 'disabled' ?>">
+                                <a class="page-link"" href=" ?pageNo=<?= $page + 1; ?>&search_data=<?= isset($searchData) ? urlencode($searchData) : ''; ?>">Next</a>
+                            </li>
+                        </ul>
+                    </nav>
+                <?php } ?> 
         </div>
     </div>
 </div>

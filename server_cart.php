@@ -12,7 +12,6 @@ if (isset($_SESSION["item_list"])) {
     $item_array = $_SESSION['item_list'];
 }
 if (isset($_POST['product_id'])) {
-
     $product_id = $_POST['product_id'];
     $branch_id = $_POST['branch_id'];
     $branch_product = get_branch_product_for_order_detail($mysqli, $product_id, $branch_id);
@@ -31,7 +30,7 @@ if (isset($_POST['product_id'])) {
         }
     }
     if ($isHave && $addtocart) {
-        array_push($item_array, ['product_id' => $branch_product['product_id'], 'branch_product_id' => $branch_product['branch_product_id'], 'product_name' => $branch_product['product_name'], 'price' => $branch_product['price'], 'branch_name' => $branch_product['branch_name'], 'qty' => 1]);
+        array_push($item_array, ['product_id' => $branch_product['product_id'], 'branch_product_id' => $branch_product['branch_product_id'], 'product_name' => $branch_product['product_name'], 'price' => $branch_product['price'], 'branch_name' => $branch_product['branch_name'], 'qty' => 1,'branch_id' => $branch_product['branch_id']]);    
     }
     $_SESSION["item_list"] = $item_array;
     // header("Location:?branch_id=$branch_id");
@@ -39,3 +38,6 @@ if (isset($_POST['product_id'])) {
 // exit;
 
 }
+// if(isset($_POST['filter'])){
+//     var_dump($_POST);
+// }
