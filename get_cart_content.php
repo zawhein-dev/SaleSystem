@@ -25,7 +25,7 @@ if (isset($_SESSION["item_list"])) {
         echo "<div class='d-flex mt-4 justify-content-center'>
         <div class='me-3'><a href='cart.php?branch_id=$branch_id' class='btn btn-success'>View Cart</a>
         </div>
-        <form action='register.php' method='get'>
+        <form action='cart.php' method='get'>
         <input type='submit' class='btn btn-success' name='order' value='Order'>
         </form>
         </div>";

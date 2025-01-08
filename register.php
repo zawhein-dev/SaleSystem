@@ -2,7 +2,9 @@
 <?php require_once("./storage/user_crud.php");
 require_once("./storage/order_product_crud.php");
 require_once("./storage/order_detail_crud.php");
+require_once("./storage/branch_product_crud.php");
 session_start();
+$item_array = $_SESSION["item_list"];
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -70,6 +72,8 @@ if (isset($_POST['submit'])) {
                         foreach ($item_array as $index => $item) {
                             $total = $item['qty'] * $item['price'];
                             save_order_detail($mysqli, $order_product_id['order_product_id'], $item['branch_product_id'], $item['qty'], $total);
+                            update_qty_when_order_success($mysqli, $item['qty'], $item['branch_product_id']);
+
                         }
                         $_SESSION["item_list"] = [];
                         header("Location:./home.php");
