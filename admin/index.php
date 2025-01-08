@@ -2,6 +2,8 @@
 <?php require_once("../layout/header.php");
 require_once("../auth/isLogin.php"); ?>
 <?php require_once("../layout/navbar.php") ?>
+</div>
+</div>
 <?php 
 if (isset($_COOKIE['user'])) {
     $userData = json_decode($_COOKIE['user'], associative: true);

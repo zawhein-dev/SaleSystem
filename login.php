@@ -30,7 +30,7 @@ if (isset($_POST['submit'])) {
         } else {
             if (password_verify($password, $user['password'])) {
                 setcookie("user", json_encode($user), time() + 60 * 60 * 24 * 30, "/");
-                header("Location:./index.php");
+                header("Location:./home.php");
                 // var_dump("Hello");
             } else {
                 $passwordErr = "Password does not match!";

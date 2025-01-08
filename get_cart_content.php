@@ -20,13 +20,12 @@ if (isset($_SESSION["item_list"])) {
             echo '<div class="col-2">' . $item['price'] . '</div>';
             echo '<div class="col-2">' . $subtotal . '</div>';
             echo '</div>';
-        }
-        
+        } 
         echo '<div class="row mt-3 mb-2"><div class="col text-end"><strong>Net Total: ' . $net_total . '</strong></div></div>';
         echo "<div class='d-flex mt-4 justify-content-center'>
         <div class='me-3'><a href='cart.php?branch_id=$branch_id' class='btn btn-success'>View Cart</a>
         </div>
-        <form action='cart.php' method='get'>
+        <form action='register.php' method='get'>
         <input type='submit' class='btn btn-success' name='order' value='Order'>
         </form>
         </div>";

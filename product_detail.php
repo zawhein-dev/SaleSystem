@@ -106,36 +106,95 @@ if (isset($_POST['submit'])) {
             <a href="./cart.php?branch_id=<?= $branch_post_id ?>" </a> View Cart!</a> The product you choose is already exist in cart.
         </div>
     <?php  } ?>
-    <table class="table table-striped">
-        <thead>
-            <th>Product Name</th>
-            <th>Photo</th>
-            <th>Price</th>
-            <th>Description</th>
-            <th>Category Name</th>
-        </thead>
-        <tbody>
-            <tr>
-                <td><?= $product['product_name'] ?></td>
-                <td><img src="./assets/product/<?= $product['photo'] ?>" alt="user" style="width: 80px; height: 80px; border-radius: 70px;"></td>
-                <td><?= $product['price'] ?></td>
-                <td>
-                    <form action="" method="POST">
-                        <input type="hidden" name="currentBranchProductQty" id="currentBranchProductQty" value="<?= $branch_product['qty'] ?>">
-                        <input type="hidden" name="product_id" value="<?= $product_id ?>">
-                        <input type="hidden" name="branch_id" value="<?= $branch_id ?>">
-                        <button type="button" id="minus" class="btn btn-sm btn-success">-</i></button>
-                        <input type="text" readonly name="qty" id="qty" class="btn btn-sm bg-light w-25" value="1">
-                        <button type="button" id="plus" class="btn btn-sm btn-primary">+</i></button>
-                </td>
-                <td><?= $product['description'] ?></td>
-                <td><?= $product['category_name'] ?></td>
-            </tr>
-        </tbody>
-    </table>
-    <button type="submit" name="submit" class="btn btn-success" <?php if($branch_product['qty'] == 0) {echo "disabled";} else{ echo "";} ?>>Add to cart</button>
-    <button name="checkout" class="btn btn-success" <?php if($branch_product['qty'] == 0) {echo "disabled";} else{ echo "";} ?>>Check Out</button>
-    </form>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <div class="container justify-content-between">
+        <div>
+      <a class="navbar-brand mx-5 fs-4 fw-bold" href="./index.php">Electronic Store</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
+        aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      </div>
+      <div>
+      <div class="collapse navbar-collapse ms-5" id="navbarSupportedContent">
+      <!-- <form class="d-flex mx-auto w-50" role="search" method="get">
+          <input type="hidden" value="<?= $branch_id ?>" name="branch_id">
+          <input class="form-control me-2" name="search_data" type="text" placeholder="Search" aria-label="Search" />
+          <button class="btn btn-outline-success" name="search">
+            <i class="bi bi-search"></i>
+          </button>
+        </form> -->
+        <ul class="navbar-nav me-auto mb-2 mb-lg-0 ">
+                    <li class="nav-item dropdown align-content-center">
+                    <?php if(isset($currentUser)){ ?>
+                      <?= $currentUser['user_name']?>
+                       <?php  } ?>
+                    </li>
+                    <li class="nav-item dropdown align-content-center ms-4">
+                    <form method="post">
+                    <div class="dropdown">
+                      <?php if(isset($currentUser)){ ?>
+                        <a class="navbar-brand dropdown-toggle" href="#" id="profileDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        <img src="./assets/userProfile/<?= $currentUser['profile'] ?>" style="width: 60px; height: 60px; border-radius: 50%;" id="profileImage" alt="userImage">
+                        </a>
+                        <?php } ?>
+                          <!-- <a class="navbar-brand dropdown-toggle" href="#" id="profileDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        <img src="./assets/userProfile/userlogo.jpg" style="width: 60px; height: 60px; border-radius: 50%;" id="profileImage" alt="userImage">
+                        </a>-->
+                        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="profileDropdown">
+                            <?php if($currentUser['role'] == 'admin'){ ?>
+                                <li><a class="dropdown-item" href="./user/index.php">Profile</a></li>
+                                <?php } else { ?>
+                                <li><a class="dropdown-item" href="./admin/index.php">Profile</a></li>
+                            <?php } ?>
+                        </ul>
+                    </div>
+                    </form>
+                    </li>
+                    <li class="nav-item dropdown align-content-center">
+                    <?php if(!isset($currentUser)){ 
+                        echo "<a href='./login.php' class='btn border-info me-1'>Login</a>";
+                        echo "<a href='./register.php' class='btn border-info ms-1'>Register</a>";
+
+                    }?>
+                    </li>
+                </ul>
+      </div>
+      </div>
+    </div>
+  </nav>
+            <div class="container-fluid">
+            <div class="row my-3">
+                <div class="left-side col-lg-6 col-sm-12 bg-white">
+                    <div class="w-75 mx-auto align-content-center bg-light " style="height: 80vh;">
+                        <img src="./assets/product/<?= $product['photo'] ?>" class="img-fluid mt-2 mb-2" style="height: 400px; width: 90%;margin-left: 5%; margin-right: 5%;" alt="product">
+                    </div>
+                </div>
+                <div class="right-side col-lg-6 col-sm-12  bg-light">
+                    <div class="mt-4 ms-3">
+                        <h4><?= $product['product_name'] ?></h4>
+                        <h5><?= $product['category_name'] ?></h5>
+                        <div class="mb-5 me-5 " style="width: 300px; height: 200px; text-align:justify;">
+                            <p><?= $product['description'] ?></p>
+                        </div>
+                        <div class="mt-4">
+                                <span class="mt-5 mb-4 text-reset fw-bolder fs-6 me-3">Instock: <?= $branch_product['qty'] ?></span>
+                                <span class="mt-5 mb-4 text-reset fw-bolder"><?= $product['price'] ?> MMK</span>
+                            <form action="" method="POST" class="mt-3">
+                                <input type="hidden" name="currentBranchProductQty" id="currentBranchProductQty" value="<?= $branch_product['qty'] ?>">
+                                <input type="hidden" name="product_id" value="<?= $product_id ?>">
+                                <input type="hidden" name="branch_id" value="<?= $branch_id ?>">
+                                <button type="button" id="minus" class="btn btn-sm btn-primary">-</i></button>
+                                <input type="text" style="width: 50px;" readonly name="qty" id="qty" class="btn btn-sm bg-info rounded" value="1">
+                                <button type="button" id="plus" class="btn btn-sm btn-primary">+</i></button>
+                                <button type="submit" name="submit" class="btn btn-success mx-3" <?php if($branch_product['qty'] <= 0) {echo "disabled";} else{ echo "";} ?>>Add to cart</button>
+                                <button name="checkout" class="btn btn-success" <?php if($branch_product['qty'] <= 0) {echo "disabled";} else{ echo "";} ?>>Check Out</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     <script>
         // qty_in_branch = 6;
         $currentBranchProductQty = document.getElementById('currentBranchProductQty');

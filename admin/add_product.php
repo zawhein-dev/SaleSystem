@@ -5,7 +5,7 @@ $productName = $productNameErr = "";
 $price = $priceErr = "";
 $description = $descriptionErr = "";
 $category = $categoryErr = "";
-$photo = $photo = "";
+$photo = $photoErr = "";
 $invalid = true;
 if(isset($_GET['product_id'])){
     $product_id = $_GET['product_id'];
@@ -17,18 +17,50 @@ if(isset($_GET['product_id'])){
     $category = $productList['category_id'];
 }
 if(isset($_POST['submit'])){
-    $productName = $_POST['productName'];
-    $price = $_POST['price'];
-    $description = $_POST['description'];
-    $photoTmpPath = $_FILES['photo']['tmp_name'];
-    $photoName = $_FILES['photo']['name'];
-    $photoSize = $_FILES['photo']['size'];
-    $photoType = $_FILES['photo']['type'];
-    $category = $_POST['category'];
+    $productName = test_input($_POST['productName']);
+    $price = test_input($_POST['price']);
+    $description = test_input($_POST['description']);
+    $category = test_input($_POST['category']);
+
+$maxSize = 5 * 1024 * 1024; 
+$allowedTypes = ['image/jpeg', 'image/png', 'image/gif'];
+if (isset($_FILES['photo']) && $_FILES['photo']['error'] === UPLOAD_ERR_OK) {
+    $file = $_FILES['photo'];
+    $photoTmpPath = $file['tmp_name'];
+    $photoName = $file['name'];
+    $photoSize = $file['size'];
+    $photoType = $file['type'];
+    $imageInfo = getimagesize($photoTmpPath);
+    if ($imageInfo === false) {
+        $photoErr = "Error: The file is not a valid image.";
+    }
+    elseif (!in_array($fileType, $allowedTypes)) {
+        $photoErr =  "Error: Only JPEG, PNG, or GIF files are allowed.";
+    }
+    elseif ($fileSize > $maxSize) {
+        $photoErr =  "Error: File size exceeds the 5MB limit.";
+    }
+} else {
+    $photoErr = "No file uploaded.";
+}
+
     if($productName == ""){
         $productNameErr = "Please enter product name..";
         $invalid = false;
-    }
+    } else
+        if (strlen($productName) < 3 || strlen($productName) > 30) {
+            $productNameErr = "Product name must be between 3 and 30 characters.";
+            $invalid = false;
+        }
+        elseif (!preg_match('/^[A-Z]/', $productName)) {
+            $productNameErr = "Product name must start with a capital letter.";
+            $invalid = false;
+        }
+        elseif (!preg_match('/^[A-Z][a-zA-Z ]{2,29}$/', $productName)) {
+            $productNameErr = "Product name can only contain letters and spaces.";
+            $invalid = false;
+        } 
+
     if(isset($_GET['product_id'])){
         $uniqueProductName = get_product_with_name_and_id($mysqli,$productName,$product_id);
        if(isset($uniqueProductName['product_name'])){
@@ -47,7 +79,23 @@ if(isset($_POST['submit'])){
     if($price == ""){
         $priceErr = "Please enter product price..";
         $invalid = false;
-    }
+    } else 
+    if (!preg_match('/^\d+(\.\d{1,2})?$/', $price)) {
+                if (!is_numeric($price)) {
+                    $priceErr = "Error: Price must be a numeric value.";
+                    $invalid = false;
+                } elseif (strpos($price, '.') !== false && preg_match('/\.\d{3,}$/', $price)) {
+                    $priceErr = "Error: Price can have at most two decimal places.";
+                    $invalid = false;
+                } elseif (strpos($price, '.') !== false && preg_match('/\.$/', $price)) {
+                    $priceErr = "Error: Price cannot end with a decimal point.";
+                    $invalid = false;
+                } else {
+                    $priceErr = "Error: Invalid price format.";
+                    $invalid = false;
+                }
+            }
+
     if($description == ""){
         $descriptionErr = "Please enter description....";
         $invalid = false;
@@ -130,6 +178,7 @@ if(isset($_POST['submit'])){
             
             <label for="photo" class="form-label  mb-1">Photo</label>
             <input type="file" name="photo" id="photo" class="form-control form-control-sm">
+            <div style="height: 13px; line-height: 13px; font-size: 14px; margin-top: 3px;"><i class="text-danger text-sm-start"><?= $photoErr ?></i></div>
             
             <label for="category" class="form-label mb-1 mt-3">Category</label>
             <select name="category" id="category" class="form-select form-select-sm">

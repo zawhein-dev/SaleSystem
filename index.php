@@ -37,12 +37,7 @@ if (isset($_COOKIE['user'])) {
     <script src="./assets/js/jquery.min.js"></script>
 </head>
 <body>
-    <!-- <?php if (!isset($currentUser['user_id'])) { ?>
-        <div class="text-end me-4 mt-4">
-            <a href="./login.php" class="btn btn-success">Login</a>
-            <a href="./register.php" class="btn btn-info">Register</a>
-        </div>
-    <?php } ?> -->
+    
     <?php 
 $branches = get_branch($mysqli);
 if ($branches->num_rows > 0): ?>

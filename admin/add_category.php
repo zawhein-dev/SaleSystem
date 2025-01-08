@@ -11,13 +11,26 @@ if(isset($_GET['category_id'])){
     $description = $categories['description'];
 }
 if(isset($_POST['submit'])){
-    $categoryName = $_POST['categoryName'];
-    $description = $_POST['description'];
+    $categoryName = test_input($_POST['categoryName']);
+    $description = test_input($_POST['description']);
 
     if($categoryName == ""){
-        $categoryNameErr = "Enter category name...";
+        $categoryNameErr = "Please enter category name..";
         $invalid = false;
-    }
+    } else
+        if (strlen($categoryName) < 3 || strlen($categoryName) > 30) {
+            $categoryNameErr = "Category name must be between 3 and 30 characters.";
+            $invalid = false;
+        }
+        elseif (!preg_match('/^[A-Z]/', $categoryName)) {
+            $categoryNameErr = "Category name must start with a capital letter.";
+            $invalid = false;
+        }
+        elseif (!preg_match('/^[A-Z][a-zA-Z ]{2,29}$/', $categoryName)) {
+            $categoryNameErr = "Category name can only contain letters and spaces.";
+            $invalid = false;
+        } 
+
     if(isset($_GET['category_id'])){
     $uniqueCategoryName = get_category_with_name_and_id($mysqli,$categoryName,$category_id);
     if(isset($uniqueCategoryName['category_name'])){
