@@ -58,12 +58,12 @@ if (isset($_POST['submit'])) {
         <div class="card-body">
             <h2 class="text-center">Login Form</h2>
             <?php if (isset($_GET['invalid'])) { ?>
-                <div class="alert alert-warning alert-dismissible fade show" role="alert">
-                    <strong><?= $_GET['invalid'] ?></strong>
-                    <button type="button" class=" btn-close close" data-bs-dismiss="alert" aria-label="Close">
-                    </button>
-                </div>
-            <?php } ?>
+                    <div class="alert alert-warning alert-dismissible fade mx-auto show w-75" role="alert">
+                        <strong><?= $_GET['invalid'] ?></strong>
+                        <button type="button" class=" btn-close close" data-bs-dismiss="alert" aria-label="Close">
+                        </button>
+                    </div>
+                    <?php } ?>
             <form method="post">
                 <div class="form-input-group mx-auto w-75">
                     <label for="userEmail" class="mb-2">Email address</label>

@@ -43,7 +43,14 @@ function get_category($mysqli)
 function delete_category($mysqli, $deleteId)
 {
     $sql = "DELETE FROM `category` WHERE `category_id`= $deleteId";
-    return $mysqli->query($sql);
+    try {
+        $mysqli->query($sql);
+        return true;
+    } catch (mysqli_sql_exception $e) {
+        $_SESSION['error_message'] = "Cannot delete that category because it is referenced in another table.";
+        return false;
+    }
+    // return $mysqli->query($sql);
 }
 function get_category_with_name_and_id($mysqli, $categoryName, $category_id)
 {

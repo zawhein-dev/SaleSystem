@@ -58,9 +58,11 @@ if (isset($_GET['order_product_id'])) {
                     </tr>
                 </thead>
                 <tbody>
-                    <?php $orders = get_product_with_order_product_id($mysqli, $order_product_id);
+                    <?php $total = 0;
+                     $orders = get_product_with_order_product_id($mysqli, $order_product_id);
                     // var_dump($orders->fetch_assoc());
                     while ($order_product = $orders->fetch_assoc()) {
+                        $total += $order_product['unit_price'];
                         ?>
                         <tr>
                             <td><?= "order_code_" . $order_product['order_product_id'] ?></td>
@@ -90,6 +92,13 @@ if (isset($_GET['order_product_id'])) {
                             </td> -->
                         </tr>
                     <?php } ?>
+                    <tr>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td colspan="6" class="text-center fw-bolder fs-6">Total</td>
+                        <td class="fw-bolder fs-6"><?= $total ?></td>
+                    </tr>
                 </tbody>
             </table>
         </div>

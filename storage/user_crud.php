@@ -70,6 +70,12 @@ function get_user_with_id($mysqli, $user_id)
 function delete_user($mysqli, $deleteId)
 {
     $sql = "DELETE FROM `user` WHERE `user_id` = $deleteId";
-
-    return $mysqli->query($sql);
+    try {
+        $mysqli->query($sql);
+        return true;
+    } catch (mysqli_sql_exception $e) {
+        $_SESSION['error_message'] = "Cannot delete that user because it is referenced in another table.";
+        return false;
+    }
+    // return $mysqli->query($sql);
 }

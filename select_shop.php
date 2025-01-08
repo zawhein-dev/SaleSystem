@@ -1,11 +1,9 @@
 <?php require_once("./storage/db.php"); ?>
-
 <?php require_once("./storage/user_crud.php");
 require_once("./storage/branch_crud.php");
 require_once("./storage/category_crud.php");
 require_once("./storage/branch_product_crud.php");
 require_once("./server_cart.php");
-
 if (isset($_COOKIE['user'])) {
   // Decode the JSON string into a PHP associative array
   $userData = json_decode($_COOKIE['user'], associative: true);
@@ -20,7 +18,7 @@ if (isset($_GET['branch_id'])) {
   $branch_id = $_GET['branch_id'];
   $branch = get_branch_with_id($mysqli, $branch_id);
 }
-$limit = 3;
+$limit = 9;
 $page = isset($_GET['pageNo']) ? intval($_GET['pageNo']) : 1;
 $offset = ($page - 1) * $limit;
 $numberTitle = ($page * $limit) - $limit;
@@ -31,18 +29,18 @@ if (isset($_GET['category_id'])) {
     $search = $_GET['search_data'];
     $row = get_product_cart_with_search_data($mysqli, $search, $branch_id, $category_id);
     $row_count = COUNT($row->fetch_all());
-    $pagination_link = ceil($row_count / 3);
+    $pagination_link = ceil($row_count / 9);
     $product_in_branch = get_search_product_cart_with_offset($mysqli, $offset, $limit, $search, $category_id, $branch_id);
   } else {
     $row = get_branch_product_with_category_id($mysqli, $category_id, $branch_id);
     $row_count = COUNT($row->fetch_all()); //get number of users
-    $pagination_link = ceil($row_count / 3);
+    $pagination_link = ceil($row_count / 9);
     $product_in_branch = get_product_cart_with_offset($mysqli, $offset, $limit, $category_id, $branch_id);
   }
   // $product_in_branch = get_branch_product_with_category_id($mysqli, $_GET['category_id'], $_GET['branch_id']);
 } else
   if (!isset($_GET['category_id'])) {
-    $limit = 3;
+    $limit = 9;
     $page = isset($_GET['pageNo']) ? intval($_GET['pageNo']) : 1;
     $offset = ($page - 1) * $limit;
     $numberTitle = ($page * $limit) - $limit;
@@ -51,12 +49,12 @@ if (isset($_GET['category_id'])) {
       $search = $_GET['search_data'];
       $row = get_product_in_branch_with_search_data($mysqli, $search, $branch_id);
       $row_count = COUNT($row->fetch_all());
-      $pagination_link = ceil($row_count / 3);
+      $pagination_link = ceil($row_count / 9);
       $product_in_branch = get_product_in_branch_with_offset($mysqli, $offset, $limit, $search, $branch_id);
     } else {
       $row = get_product_in_branch($mysqli, $branch_id);
       $row_count = COUNT($row->fetch_all()); //get number of users
-      $pagination_link = ceil($row_count / 3);
+      $pagination_link = ceil($row_count / 9);
       $product_in_branch = get_search_product_in_branch_with_offset($mysqli, $offset, $limit, $branch_id);
     }
     // $product_in_branch = get_product_in_branch($mysqli, $branch_id);
@@ -68,19 +66,26 @@ if (isset($_GET['category_id'])) {
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>System</title>
+    <link rel="stylesheet" href="./assets/css/style.css">
+    <link rel="stylesheet" href="./assets/fontawesome/css/all.min.css">
+    <script src="./assets/js/bootstrap.min.js"></script>
+    <script src="./assets/js/jquery.min.js"></script>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet" />
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
     integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous" />
-  <!--  -->
+  
   <link rel="stylesheet" href="./assets/css/bootstrap.min.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
     integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg=="
     crossorigin="anonymous" referrerpolicy="no-referrer" />
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"
+  <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"
     integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g=="
-    crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    crossorigin="anonymous" referrerpolicy="no-referrer"></script> -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
   <style>
+    #profileDropdown::after {
+    display: none;
+}
     .active-item {
       background-color: rgb(150, 176, 199);
       /* Change to your desired color */
@@ -199,70 +204,69 @@ if (isset($_GET['category_id'])) {
 </head>
 
 <body style="background-color: white">
-  <nav class="navbar navbar-expand-lg bg-light">
-    <div class="container">
-      <a class="navbar-brand fw-bolder" href="./index.php"><?php echo $branch['branch_name'] . " Branch" ?></a>
-      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent"
-        aria-controls="navbarContent" aria-expanded="false" aria-label="Toggle navigation">
+  <nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <div class="container-fluid ">
+      <a class="navbar-brand mx-5 fs-4 fw-bold" href="./index.php">Electronic Store</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
+        aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
-      <div class="collapse navbar-collapse" id="navbarContent">
-        <form class="d-flex mx-auto w-50" role="search" method="get">
+      <div class="collapse navbar-collapse ms-5 " id="navbarSupportedContent">
+      <form class="d-flex mx-auto w-50" role="search" method="get">
           <input type="hidden" value="<?= $branch_id ?>" name="branch_id">
-          <!-- <input type="hidden" value="<?= $category_id ?>" name="search_category_id"> -->
           <input class="form-control me-2" name="search_data" type="text" placeholder="Search" aria-label="Search" />
           <button class="btn btn-outline-success" name="search">
             <i class="bi bi-search"></i>
           </button>
         </form>
-        <div class="d-flex align-items-center">
-          <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-            <li class="nav-item position-relative mt-2 me-3">
-              <a class="nav-link" href="./cart.php?branch_id=<?= $_GET['branch_id'] ?>">
-                <i class="bi bi-cart fs-4"></i>
-                <span class="position-absolute top-2 start-100 translate-middle badge rounded-pill bg-danger">
-                  <?= count($item_array) ?>
-                </span>
-              </a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="#">
-                <span class="d-flex">
-                  <span class="<?php if (isset($currentUser)) {
-                    echo "nav-link";
-                  } ?>">
-                    <?php if (isset($currentUser)) {
-                      echo "<span class='mt-4'>" . $currentUser['user_name'] . "</span>";
-                    } else {
-                      echo "<a href='./login.php' class='btn btn-sm btn-success mb-2'>Login</a>";
-                    } ?>
-                  </span>
-                  <span>
-                    <?php if (isset($currentUser)) { ?>
-                      <img src="./assets/userProfile/<?= $currentUser['profile'] ?>"
-                        style="width: 50px; height: 50px; border-radius: 50%;" id="profileImage" alt="Image">
-                    <?php } else {
-                      echo "<a href='./register.php' class='btn btn-sm btn-info mb-2'>Register</a>";
-                    } ?>
-                  </span>
-                </span>
-              </a>
-            </li>
-          </ul>
-        </div>
+        <ul class="navbar-nav me-auto mb-2 mb-lg-0 ">
+                <li class="nav-item position-relative mt-2 me-3">
+                              <a class="nav-link" href="./cart.php?branch_id=<?= $_GET['branch_id'] ?>">
+                                <i class="bi bi-cart fs-4"></i>
+                                <span class="position-absolute top-2 start-100 translate-middle badge rounded-pill bg-danger">
+                                  <?= count($item_array) ?>
+                                </span>
+                              </a>
+                            </li>            
+                 <li class="nav-item dropdown align-content-center">
+                    <?php if(isset($currentUser)){ ?>
+                      <?= $currentUser['user_name']?>
+                       <?php  } ?>
+                    </li>
+                    <li class="nav-item dropdown align-content-center ms-4">
+                    <form method="post">
+                    <div class="dropdown">
+                      <?php if(isset($currentUser)){ ?>
+                        <a class="navbar-brand dropdown-toggle" href="#" id="profileDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        <img src="./assets/userProfile/<?= $currentUser['profile'] ?>" style="width: 60px; height: 60px; border-radius: 50%;" id="profileImage" alt="userImage">
+                        </a>
+                        <?php } ?>
+                          <!-- <a class="navbar-brand dropdown-toggle" href="#" id="profileDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        <img src="./assets/userProfile/userlogo.jpg" style="width: 60px; height: 60px; border-radius: 50%;" id="profileImage" alt="userImage">
+                        </a>-->
+                        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="profileDropdown">
+                          <?php if($currentUser['role'] == 1){ ?>
+                            <li><a class="dropdown-item" href="./admin/index.php">Profile</a></li>
+                            <?php } else { ?>
+                            <li><a class="dropdown-item" href="./user/index.php">Profile</a></li>
+                              <?php } ?>
+                        </ul>
+                    </div>
+                    </form>
+                    </li>
+                    <li class="nav-item dropdown align-content-center">
+                    <?php if(!isset($currentUser)){ 
+                        echo "<a href='./login.php' class='btn border-info me-1'>Login</a>";
+                        echo "<a href='./register.php' class='btn border-info ms-1'>Register</a>";
+                    }?>
+                    </li>
+                </ul>
       </div>
     </div>
   </nav>
-  <!-- <?php if (!isset($currentUser['user_id'])) { ?> -->
-        <!-- <div class="text-end me-4 mt-4">
-            <a href="./login.php" class="btn btn-success">Login</a>
-            <a href="./register.php" class="btn btn-info">Register</a>
-        </div> -->
-    <!-- <?php } ?> -->
   <div class="container-fluid d-flex flex-column flex-lg-row">
-    <!-- Left Sidebar: Category list -->
     <div class="col-12 col-lg-3 p-3 sidebar">
-      <h5>Categories</h5>
+      <h5>Categories in <span class="fs-4 fw-bolder ms-2"><?= $branch['branch_name'] ?> </span></h5> 
       <ul class="list-group list-unstyled">
         <li class="list-group-item my-2 rounded p-3 text-center border-0" id="active">
           <a href="?branch_id=<?= $branch_id ?>" class="text-decoration-none text-black">
@@ -451,13 +455,6 @@ if (isset($_GET['category_id'])) {
       }
     });
   </script>
-  <script src="./assets/js/bootstrap.min.js"></script>
-  <script src="./assets/js/jquery.min.js"></script>
-
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
-    integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
-    crossorigin="anonymous"></script>
-
   <script>document.addEventListener("DOMContentLoaded", () => {
       const listItems = document.querySelectorAll(".list-group-item");
 
@@ -471,7 +468,11 @@ if (isset($_GET['category_id'])) {
       });
     });
   </script>
-
+  <script src="./assets/js/bootstrap.min.js"></script>
+  <script src="./assets/js/jquery.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+    crossorigin="anonymous"></script>
 </body>
 
 </html>

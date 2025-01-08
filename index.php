@@ -18,7 +18,7 @@ if (isset($_COOKIE['user'])) {
 <?php if (have_admin($mysqli)) {
         $hashedPassword = password_hash("123456", PASSWORD_DEFAULT);
         //  $newFileName = uniqid('img_') . '.' . pathinfo("admin.jpg", PATHINFO_EXTENSION); 
-        $status = save_user($mysqli, 'admin', 'admin@gmail.com', $hashedPassword, "user.jpg", 1);
+        $status = save_user($mysqli, 'admin', 'admin@gmail.com', $hashedPassword, "userLogo.jpg", 1);
         if ($status === true) {
         } else {
             $fail_query = $status;
@@ -77,7 +77,7 @@ if ($branches->num_rows > 0): ?>
                          </a>
                     <div class="carousel-caption d-none d-md-block">
                         <h5 class="text-white"><?php echo htmlspecialchars($branch['branch_name'] ?? 'Branch'); ?></h5>
-                        <p class="text-white"><?php echo htmlspecialchars($branch['description'] ?? 'No description available.'); ?></p>
+                        <p class="text-white"><?php echo htmlspecialchars($branch['address'] ?? 'No description available.'); ?></p>
                     </div>
                 </div>
                 <?php 

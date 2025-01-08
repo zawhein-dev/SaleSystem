@@ -7,9 +7,15 @@ require_once("../auth/isLogin.php");
 <?php require_once("../storage/category_crud.php");?>
 <?php require_once("../storage/product_crud.php");
  require_once("../storage/order_product_crud.php");
-
-require_once("../storage/order_detail_crud.php");?>
-<?php require_once("../storage/branch_product_crud.php");?>
+ require_once("../storage/branch_product_crud.php");
+require_once("../storage/order_detail_crud.php");
+function test_input($data) {
+  $data = trim($data);
+  $data = stripslashes($data);
+  $data = htmlspecialchars($data);
+  return $data;
+}
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -19,8 +25,7 @@ require_once("../storage/order_detail_crud.php");?>
     <link rel="stylesheet" href="../assets/css/bootstrap.min.css">
     <link rel="stylesheet" href="../assets/css/style.css">
     <link rel="stylesheet" href="../assets/fontawesome/css/all.min.css">
-    <script src="../assets/js/bootstrap.min.js"></script>
-    <script src="../assets/js/jquery.min.js"></script>
+    
     <style>
 /* Remove the dropdown arrow for the profile dropdown */
 #profileDropdown::after {
@@ -28,7 +33,6 @@ require_once("../storage/order_detail_crud.php");?>
 }
 </style>
 </head>
-
 <body class="" style="overflow: hidden;">
 
     <div class="main-content row d-flex bg-light">

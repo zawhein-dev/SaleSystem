@@ -37,9 +37,11 @@ require_once("../auth/isLogin.php"); ?>
                     </tr>
                 </thead>
                 <tbody>
-                    <?php $product_orders = get_order_product_with_current_user($mysqli,$current_user_id,$order_product_id);
+                    <?php $total = 0;
+                     $product_orders = get_order_product_with_current_user($mysqli,$current_user_id,$order_product_id);
                     // var_dump($product_orders->fetch_assoc());
                     while($order_detail = $product_orders->fetch_assoc() ){
+                        $total += $order_detail['total_price'];
                     ?>
                     <tr>
                         <td><?= $order_detail['product_name']?></td>
@@ -50,9 +52,41 @@ require_once("../auth/isLogin.php"); ?>
                         <td><?= $order_detail['total_price']?></td>
                     </tr>
                 <?php }  ?>
+                <tr>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td class="fw-bolder">Total</td>
+                   <td class="fw-bolder"><?= $total ?></td>
+                </tr>
                 </tbody>
             </table>
         </div>
     </div>
 </div>
+<script>
+    const fullUrl = window.location.href;
+    const parts = fullUrl.split("/");
+    const latestUrl = parts[parts.length - 1];
+    // console.log(latestUrl);
+    const searchBars = document.getElementsByClassName("search-bar");
+    if (latestUrl.includes("user_order_list.php")) {
+        // for (let i = 0; i < searchBars.length; i++) {
+            searchBars[0].style.display = "none"; 
+        // }
+    }
+    // console.log(searchBars);
+</script>
+
+<!-- <script>
+    const fullUrl = window.location.href;
+    const parts = fullUrl.split("/");
+    latestUrl = parts[parts.length - 1];
+    console.log(latestUrl);
+    searchBar = document.getElementsByClassName("search-bar");
+    if (latestUrl.includes("user_order_list.php")) searchBar.css("display", "none")
+    console.log(searchBar);
+</script> -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js" integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 <?php require_once("../userLayout/footer.php") ?>

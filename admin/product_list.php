@@ -1,5 +1,6 @@
 <?php require_once("../layout/header.php") ?>
 <?php require_once("../layout/navbar.php");
+
 if (isset($_GET['deleteId'])) {
     $deleteId = $_GET['deleteId'];
     $selectPhoto = get_product_with_id($mysqli, $deleteId);
@@ -10,11 +11,11 @@ if (isset($_GET['deleteId'])) {
     if (file_exists($filePath)) {
         if (unlink($filePath)) {
             delete_product($mysqli, $deleteId);
-            echo "<script>location.replace('./product_list.php')</script>";
+            // echo "<script>location.replace('./product_list.php')</script>";
         }
     } else {
         delete_product($mysqli, $deleteId);
-        echo "<script>location.replace('./product_list.php')</script>";
+        // echo "<script>location.replace('./product_list.php')</script>";
     }
 }
 $limit = 3;
@@ -35,13 +36,23 @@ $numberTitle = ($page * $limit) - $limit;
     }
 
 ?>
-
+<?php require_once("../storage/branch_product_crud.php");
+?>
 <div class="main bg-white">
     <div class="content w-100">
-        <div class="card w-60 mt-2 mx-1">
+            <?php if(isset($_SESSION['error_message'])){ ?>
+                    <div class="alert alert-warning alert-dismissible fade mx-auto show w-75 mt-2" role="alert">
+                        <strong><?= $_SESSION['error_message'] ?></strong>
+                        <!-- <form method="post"> -->
+                        <button type="button" onclick="destroySessionVariable()" name="unsetSession" class=" btn-close close unsetSession" data-bs-dismiss="alert" aria-label="Close">
+                        </button>
+                        <!-- </form> -->
+                    </div>
+                    <?php } ?>
+        <div class="card w-75 mt-2 mx-auto">
             <div class="card-title fs-3 text-center">Product List</div>
             <div class="card-body">
-                <table class="table table-striped  w-50 mx-auto">
+                <table class="table table-striped w-100 mx-auto">
                     <thead>
                         <tr>
                             <th>No.</th>
@@ -101,25 +112,6 @@ $numberTitle = ($page * $limit) - $limit;
                         </ul>
                     </nav>
                 <?php } ?>
-            </div>
-        </div>
-    </div>
-</div>
-
-<div class="modal modal-sm" id="deleteModal" tabindex="-1">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title">Confirmation Message</h5>
-                <button type="button" class="btn-close btn-sm" id="closeBtn" data-bs-dismiss="modal"
-                    aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                <p>Are you sure to delete..</p>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-sm btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                <button type="button" class="btn btn-sm btn-primary" id="deleteBtn">OK</button>
             </div>
         </div>
     </div>

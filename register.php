@@ -95,59 +95,52 @@ if (isset($_POST['submit'])) {
 
 <body>
 
-    <div class="card mx-auto w-50 mt-4">
-        <div class="card-body">
-            <h2 class="text-center">Register Form</h2>
-            <form method="post" enctype="multipart/form-data">
-                <div class="form-input-group mx-auto w-75">
-                    <label for="userName" class="mb-2">User Name</label>
-                    <input name="userName" value="<?= $userName ?>" type="text" class="form-control" id="userName" placeholder="enter user name">
-                    <div style="height: 20px; line-height: 20px;"><i class="text-danger text-sm-start"><?= $userNameErr ?></i></div>
-                </div>
-                <div class="form-input-group mx-auto w-75">
-                    <label for="userEmail" class="mb-2">Email address</label>
-                    <input name="userEmail" value="<?= $userEmail ?>" type="text" class="form-control" id="userEmail" placeholder="useremail@gmail.com">
-                    <div style="height: 20px; line-height: 20px;"><i class="text-danger text-sm-start"><?= $userEmailErr ?></i></div>
-                </div>
-                <div class="form-input-group mx-auto w-75">
+    <body class="bg-light">
+    <div class="d-flex justify-content-center align-items-center min-vh-100">
+        <div class="card mx-auto w-50">
+            <div class="card-body">
+                <h4 class="text-center">Register Form</h4>
+                <form method="post" enctype="multipart/form-data">
+                    <label for="userName" class="">User Name</label>
+                    <input name="userName" class="form-control <?php echo !empty($userNameErr) ? 'is-invalid' : ''; ?>" value="<?= $userName ?>" type="text" id="userName" placeholder="Enter user name">
+                    <div class="invalid-feedback"><?php echo $userNameErr; ?></div>
+
+                    <label for="userEmail" class="">Email address</label>
+                    <input name="userEmail" class="form-control <?php echo !empty($userEmailErr) ? 'is-invalid' : ''; ?>" value="<?= $userEmail ?>" type="text" id="userEmail" placeholder="useremail@gmail.com">
+                    <div class="invalid-feedback"><?php echo $userEmailErr; ?></div>
+
                     <label for="userProfile" class="form-label">Profile</label>
-                    <input type="file" value="<?= $fileName ?>" name="userProfile" id="userProfile" class="form-control">
-                    <div style="height: 20px; line-height: 20px;"><i class="text-danger text-sm-start"><?= $fileNameErr ?></i></div>
-                </div>
-                <div class="form-input-group mx-auto w-75">
-                    <label for="password" class="mb-2">Password</label>
-                    <input name="password" value="<?= $password ?>" type="password" class="form-control" id="password" placeholder="password">
-                    <div style="height: 20px; line-height: 20px;"><i class="text-danger text-sm-start"><?= $passwordErr ?></i></div>
-                </div>
-                <div class="form-input-group mx-auto w-75">
+                    <input type="file" class="form-control <?php echo !empty($fileNameErr) ? 'is-invalid' : ''; ?>" value="<?= $fileName ?>" name="userProfile" id="userProfile">
+                    <div class="invalid-feedback"><?php echo $fileNameErr; ?></div>
+
+                    <label for="password" class="">Password</label>
+                    <input name="password" class="form-control <?php echo !empty($passwordErr) ? 'is-invalid' : ''; ?>" value="<?= $password ?>" type="password" id="password" placeholder="Password">
+                    <div class="invalid-feedback"><?php echo $passwordErr; ?></div>
+
                     <input type="checkbox" id="showPassword" class="form-check-input">
-                    <label class="form-check-label" for="show">
-                        Show Password
-                    </label>
-                    <div style="height: 20px; line-height: 20px;"></div>
-                </div>
-                <div class="form-input-group mx-auto w-75">
-                    <label for="confirmPassword" class="mb-2">Confirm Password</label>
-                    <input name="confirmPassword" value="<?= $confirmPassword ?>" type="password" class="form-control" id="confirmPassword" placeholder="confirm password">
-                    <div style="height: 20px; line-height: 20px;"><i class="text-danger text-sm-start"><?= $confirmPasswordErr ?></i></div>
-                </div>
-                <div class="form-input-group mx-auto w-75">
+                    <label class="form-check-label" for="showPassword">Show Password</label>
+
+                    <label for="confirmPassword" class="">Confirm Password</label>
+                    <input name="confirmPassword" class="form-control <?php echo !empty($confirmPasswordErr) ? 'is-invalid' : ''; ?>" value="<?= $confirmPassword ?>" type="password" id="confirmPassword" placeholder="Confirm password">
+                    <div class="invalid-feedback"><?php echo $confirmPasswordErr; ?></div>
+
                     <input type="checkbox" id="showConfirmPassword" class="form-check-input">
-                    <label class="form-check-label" for="show">
-                        Show Password
-                    </label>
-                    <div style="height: 20px; line-height: 20px;"></div>
-                </div>
-                <div class=" text-center">
-                    <button class="btn btn-success w-25" name="submit">Submit</button>
-                </div>
-                <div class="text-center">
-                    <a>Do you have account?</a>
-                    <a href="./login.php" class="btn fs-6 text-primary">Login Here</a>
-                </div>
-            </form>
+                    <label class="form-check-label" for="showConfirmPassword">Show Confirm Password</label>
+
+                    <div class="text-center mt-3">
+                        <button class="btn btn-success w-25" name="submit">Submit</button>
+                    </div>
+
+                    <div class="text-center mt-3">
+                        <a>Do you have an account?</a>
+                        <a href="./login.php" class="btn fs-6 text-primary">Login Here</a>
+                    </div>
+                </form>
+            </div>
         </div>
     </div>
+</body>
+
 </body>
 <script>
     $(() => {

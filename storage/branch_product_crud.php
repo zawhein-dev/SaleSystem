@@ -42,7 +42,15 @@ function get_branch_product_with_offset($mysqli, $offset, $limit,$search)
 function delete_branch_product($mysqli, $deleteId)
 {
     $sql = "DELETE FROM `branch_product` WHERE `branch_product_id` = $deleteId";
-    return $mysqli->query($sql);
+    try {
+        // Execute the query
+        $mysqli->query($sql);
+        return true;
+    } catch (mysqli_sql_exception $e) {
+        $_SESSION['error_message'] = "Cannot delete that branch product because it is referenced in another table.";
+        return false;
+    }
+    // return $mysqli->query($sql);
 }
 function get_branch_product_with_id($mysqli, $branch_product_id)
 {
@@ -60,7 +68,7 @@ function  update_branch_product($mysqli, $branch, $product, $qty, $branch_produc
 }
 function get_branch_product_for_order_detail($mysqli, $product_id, $branch_id)
 {
-    $sql = "SELECT * FROM `branch_product` INNER JOIN `branch` ON `branch_product`.`branch_id` = `branch`.`branch_id` INNER JOIN `product` ON `branch_product`.`product_id` = `product`.`product_id`  WHERE `branch_product`.`product_id` = $product_id AND `branch_product`.`branch_id` = $branch_id";
+    $sql = "SELECT * FROM `branch_product` INNER JOIN `branch` ON `branch_product`.`branch_id` = `branch`.`branch_id` INNER JOIN `product` ON `branch_product`.`product_id` = `product`.`product_id` INNER JOIN category ON  product.category_id = category.category_id  WHERE `branch_product`.`product_id` = $product_id AND `branch_product`.`branch_id` = $branch_id";
     $branch_product = $mysqli->query($sql);
     return $branch_product->fetch_assoc();
 }

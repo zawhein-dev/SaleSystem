@@ -15,7 +15,7 @@ if (isset($_COOKIE['user'])) {
 <div class="container_fluid bg-white">
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
         <div class="container-fluid ">
-            <a class="navbar-brand mx-5 fw-bold" href="#">Anycall Mobile</a>
+            <a class="navbar-brand mx-5 fs-4 fw-bold" href="../index.php">Electronic Store</a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
@@ -42,11 +42,11 @@ if (isset($_COOKIE['user'])) {
                             <li><a class="dropdown-item" href="../user/change_password.php">Change Password</a></li>
                         </ul>
                     </li>
-                    <li class="nav-item dropdown  mx-3">
+                    <li class="nav-item dropdown search-bar mx-3">
                         <form action="" class="form-input-group" method="get">
                             <div class="d-flex">
-                            <input type="text"  name="search_data" placeholder="Search..." class="search-input form-control">
-                            <button class="search-btn btn btn-light border-info" name="search" type="submit">
+                            <input type="text"  name="search_data" placeholder="Search with order code.." class="search-input form-control">
+                            <button class="search-btn btn btn-light border-info ms-2" name="search" type="submit">
                                 <i class="fas fa-search"></i>
                             </button>
                             </div>

@@ -30,7 +30,7 @@ if(isset($_POST['submit'])){
         $qtyErr = "Please enter qty ..";
         $invalid = false;
     }
-    if($invalid){
+    if($invalid ==" isafhiosd"){
         if(isset($_GET['branch_product_id'])){
                     $status = update_branch_product($mysqli,$branch,$product,$qty,$branch_product_id);
                 }else{

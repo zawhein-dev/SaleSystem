@@ -25,11 +25,26 @@ function get_search_product_with_offset($mysqli, $offset, $limit)
     return $mysqli->query($sql);
 
 }
+// function delete_product($mysqli, $deleteId)
+// {
+//     $sql = "DELETE FROM `product` WHERE `product_id` = $deleteId";
+//     return $mysqli->query($sql);
+    
+// }
 function delete_product($mysqli, $deleteId)
 {
     $sql = "DELETE FROM `product` WHERE `product_id` = $deleteId";
-    return $mysqli->query($sql);
+    try {
+        // Execute the query
+        $mysqli->query($sql);
+        return true;
+    } catch (mysqli_sql_exception $e) {
+        $_SESSION['error_message'] = "Cannot delete that product because it is referenced in another table.";
+        return false;
+    }
 }
+
+
 function get_product_with_id($mysqli, $product_id)
 {
     $sql = "SELECT * FROM `product` INNER JOIN `category` ON `product`.`category_id` = `category`.`category_id` WHERE `product_id` = $product_id";

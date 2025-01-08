@@ -24,10 +24,19 @@ $numberTitle = ($page * $limit) - $limit;
  
 <div class="main bg-white">
     <div class="content w-100">
-        <div class="card w-60 mt-2 mx-1">
+    <?php if(isset($_SESSION['error_message'])){ ?>
+                    <div class="alert alert-warning alert-dismissible fade mx-auto show w-75 mt-2" role="alert">
+                        <strong><?= $_SESSION['error_message'] ?></strong>
+                        <!-- <form method="post"> -->
+                        <button type="button" onclick="destroySessionVariable()" name="unsetSession" class=" btn-close close unsetSession" data-bs-dismiss="alert" aria-label="Close">
+                        </button>
+                        <!-- </form> -->
+                    </div>
+                    <?php } ?>
+        <div class="card w-75 mt-2 mx-auto">
             <div class="card-title fs-3 text-center">Branch List</div>
             <div class="card-body">
-                <table class="table table-striped  w-50 mx-auto">
+                <table class="table table-striped  w-100 mx-auto">
                     <thead>
                         <tr>
                             <th>No.</th>

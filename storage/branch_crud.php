@@ -47,7 +47,14 @@ function update_branch($mysqli, $branchName, $address, $branch_id)
 function  delete_branch($mysqli, $deleteId)
 {
     $sql = "DELETE FROM `branch` WHERE  `branch_id` = '$deleteId'";
-    return $mysqli->query($sql);
+    try {
+        $mysqli->query($sql);
+        return true;
+    } catch (mysqli_sql_exception $e) {
+        $_SESSION['error_message'] = "Cannot delete that branch because it is referenced in another table.";
+        return false;
+    }
+    // return $mysqli->query($sql);
 }
 function  get_product_in_branch($mysqli, $branch_id)
 {

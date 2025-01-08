@@ -3,7 +3,6 @@
 if (isset($_COOKIE['user'])) {
     // Decode the JSON string into a PHP associative array
     $userData = json_decode($_COOKIE['user'], associative: true);
-
     // Check if the 'username' key exists and display it
     if (isset($userData['user_id'])) {
         $user_id = $userData['user_id'];
@@ -15,7 +14,7 @@ if (isset($_COOKIE['user'])) {
 <div class="container_fluid bg-white">
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
         <div class="container-fluid ">
-            <a class="navbar-brand mx-5 fw-bold" href="#">Anycall Mobile</a>
+            <a class="navbar-brand mx-5 fs-4 fw-bold" href="../index.php">Electronic Store</a>
             <!-- <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button> -->
@@ -80,18 +79,27 @@ if (isset($_COOKIE['user'])) {
                     </li>
                     <li class="nav-item dropdown  mx-3">
                         <form action="" class="form-input-group" method="get">
-                            <input type="text"  name="search_data" placeholder="Search..." class="search-input">
-                            <button class="search-btn" name="search">
+                            <div class="d-flex">
+                            <input type="text"  name="search_data" placeholder="Search..." class="search-input form-control">
+                            <button class="search-btn btn border-info" name="search">
                                 <i class="fas fa-search"></i>
                             </button>
+                            </div>
                         </form>
                     </li>
                 </ul>
                 <form method="post">
                         <div class="dropdown">
+                            <?php if(empty($currentUser['user'])){ ?>
                         <a class="navbar-brand dropdown-toggle" href="#" id="profileDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                             <img src="../assets/userProfile/<?= $currentUser['profile'] ?>" style="width: 60px; height: 60px; border-radius: 50%;" id="profileImage" alt="Image" class="ms-2">
                         </a>
+                        <?php } else { ?>
+                            <a class="navbar-brand dropdown-toggle" href="#" id="profileDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            <img src="../assets/userProfile/userLogo.jpg" style="width: 60px; height: 60px; border-radius: 50%;" id="profileImage" alt="Image" class="ms-2">
+                        </a>
+                            <?php } ?>
+
                         <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="profileDropdown">
                             <li><a class="dropdown-item" href="../user/profile.php">Profile</a></li>
                             <li>

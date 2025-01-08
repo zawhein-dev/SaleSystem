@@ -18,8 +18,6 @@ if (isset($_GET['accept'])) {
             $update_branch_product_data = $result['branch_product_id'];
             $update_branch_product_qty = $result['qty'];
             $instock = get_qty_with_branch_product_id($mysqli, $update_branch_product_data);
-        
-            
             if ($instock['qty'] == 0) {
                 $should_execute_queries = false; 
                 break; 
@@ -173,7 +171,7 @@ if (isset($_GET['cancel'])) {
     }
 
 }
-$limit = 5;
+$limit = 6;
 $page = isset($_GET['pageNo']) ? intval($_GET['pageNo']) : 1;
 $offset = ($page - 1) * $limit;
 $numberTitle = ($page * $limit) - $limit;
@@ -181,12 +179,12 @@ $numberTitle = ($page * $limit) - $limit;
             $searchData = $_GET['search_data'];
             $row =  get_order_product_with_search_data($mysqli, $searchData);
             $row_count = COUNT($row->fetch_all());
-            $pagination_link = ceil($row_count / 5); 
+            $pagination_link = ceil($row_count / 6); 
             $order_product = get_order_product_with_offset($mysqli, $offset, $limit,$searchData);
     }else{
         $row = get_order_detail($mysqli);
         $row_count  = COUNT($row->fetch_all()); //get number of users
-        $pagination_link = ceil($row_count / 5);
+        $pagination_link = ceil($row_count / 6);
         $order_product = get_search_order_product_with_offset($mysqli, $offset, $limit);
     }
 

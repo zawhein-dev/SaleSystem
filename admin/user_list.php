@@ -22,8 +22,17 @@ $numberTitle = ($page * $limit) - $limit;
     }
 ?>
 <div class="main bg-white">
+<?php if(isset($_SESSION['error_message'])){ ?>
+                    <div class="alert alert-warning alert-dismissible fade mx-auto show w-75 mt-2" role="alert">
+                        <strong><?= $_SESSION['error_message'] ?></strong>
+                        <!-- <form method="post"> -->
+                        <button type="button" onclick="destroySessionVariable()" name="unsetSession" class=" btn-close close unsetSession" data-bs-dismiss="alert" aria-label="Close">
+                        </button>
+                        <!-- </form> -->
+                    </div>
+                    <?php } ?>
     <div class="content w-100">
-        <div class="card w-90 mt-2 mx-1">
+        <div class="card w-75 mt-2 mx-auto">
             <div class="card-title fs-3 text-center">User List</div>
             <div class="card-body">
                 <table class="table table-striped  w-100 mx-auto">
@@ -60,12 +69,12 @@ $numberTitle = ($page * $limit) - $limit;
                                                                             echo "customer";
                                                                             break;
                                                                         default:
-                                                                            break;
+             break;
                                                                     } ?></td>
                             <td class="align-content-center"><img src="../assets/userProfile/<?= $user['profile'] ?>" alt="user" style="width: 80px; height: 80px; border-radius: 70px;"></td>
                             <td class="align-content-center">
                                 <a href="./add_user.php?user_id=<?= $user['user_id']?>" class="btn btn-sm btn-primary"><i class="fa fa-pen"></i></a>
-                                <a href="./change_password.php?user_id=<?= $user['user_id']?>" class="btn btn-sm btn-primary"><i class="fa fa-pen"></i></a>
+                                <a href="./change_password.php?user_id=<?= $user['user_id']?>" class="btn btn-sm btn-primary"><i class="fa fa-key"></i></a>
                                 <button class="btn btn-sm btn-danger deleteUser" data-value="<?= $user['user_id']?>" data-bs-toggle="modal" data-bs-target="#deleteModal"><i class="fa fa-trash"></i></button>
                             </td>
                         </tr>

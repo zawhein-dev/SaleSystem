@@ -1,5 +1,5 @@
 <?php
-// try {
+try {
 $mysqli = new mysqli("localhost", "root", "");
 $sql = "CREATE DATABASE IF NOT EXISTS `sale_and_stock_management_system`";
 if ($mysqli->query($sql)) {
@@ -7,10 +7,10 @@ if ($mysqli->query($sql)) {
         create_table($mysqli);
     }
 }
-// } catch (\Throwable $th) {
-//     echo "Can not connect to Database!";
-//     die();
-// }
+} catch (\Throwable $th) {
+    echo "Can not connect to Database!";
+    die();
+}
 
 // auto create all table when our index page is loaded
 function create_table($mysqli)

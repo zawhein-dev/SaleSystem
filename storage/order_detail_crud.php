@@ -133,14 +133,17 @@ function get_order_detail_with_current_user_with_offset($mysqli, $offset, $limit
 {
     $sql = "SELECT * FROM `order_product`  
     INNER JOIN user ON order_product.user_id = user.user_id
-    WHERE order_product.`order_product_id` LIKE '%$search%' AND user.user_id = $current_user_id LIMIT $limit OFFSET $offset";
+    
+    WHERE order_product.`order_product_id` LIKE '%$search%' AND user.user_id = $current_user_id  ORDER BY order_product.order_product_id DESC
+    LIMIT $limit OFFSET $offset";
     return $mysqli->query($sql);
 }
 function get_search_order_detail_with_current_user_with_offset($mysqli, $offset, $limit,$current_user_id)
 {
     $sql = "SELECT * FROM order_product
     INNER JOIN user ON order_product.user_id = user.user_id
-    WHERE user.user_id = $current_user_id
-     LIMIT $limit OFFSET $offset";
+    WHERE user.user_id = $current_user_id 
+    ORDER BY order_product.order_product_id DESC
+     LIMIT $limit OFFSET $offset ";
     return $mysqli->query($sql);
 }

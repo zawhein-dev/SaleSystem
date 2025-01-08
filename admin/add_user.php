@@ -125,7 +125,9 @@ if (isset($_POST['submit'])) {
             <div style="height: 13px; line-height: 13px; font-size: 14px; margin-top: 3px;"><i class="text-danger text-sm-start"><?= $userEmailErr ?></i></div>
 
             <label for="role" class="form-label mb-1">Role</label>
-            <select name="role" id="role" class="form-select form-select-sm">
+            <select name="role" id="role" class="form-select form-select-sm" <?php if ($role == "1") {
+                                        echo "disabled";
+                                    } ?>>
                 <option value="" selected>Select Role</option>
                 <option value="1" <?php if ($role == "1") {
                                         echo "selected";

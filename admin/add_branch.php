@@ -11,8 +11,8 @@ if(isset($_GET['branch_id'])){
     $address = $branches['address'];
 }
 if(isset($_POST['submit'])){
-    $address = $_POST['address'];
-    $branchName = $_POST['branchName'];
+    $address = test_input($_POST['address']);
+    $branchName = test_input($_POST['branchName']);
     if($branchName == ""){
         $branchNameErr = "Please enter branch name..";
         $invalid = false;

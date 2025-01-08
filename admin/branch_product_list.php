@@ -5,7 +5,7 @@
     delete_branch_product($mysqli, $deleteId);
 }; 
 
-$limit = 3;
+$limit = 7;
 $page = isset($_GET['pageNo']) ? intval($_GET['pageNo']) : 1;
 $offset = ($page - 1) * $limit;
 $numberTitle = ($page * $limit) - $limit;
@@ -13,22 +13,31 @@ $numberTitle = ($page * $limit) - $limit;
             $searchData = $_GET['search_data'];
             $row =  get_branch_product_with_search_data($mysqli, $searchData);
             $row_count = COUNT($row->fetch_all());
-            $pagination_link = ceil($row_count / 3); 
+            $pagination_link = ceil($row_count / 7); 
             $branch_products = get_branch_product_with_offset($mysqli, $offset, $limit,$searchData);
     }else{
         $row = get_branch_product($mysqli);
         $row_count  = COUNT($row->fetch_all()); //get number of users
-        $pagination_link = ceil($row_count / 3);
+        $pagination_link = ceil($row_count / 7);
         $branch_products = get_search_branch_product_with_offset($mysqli, $offset, $limit);
     }
 
  ?>
 <div class="main bg-white">
     <div class="content w-100">
-        <div class="card w-60 mt-2 mx-1">
+    <?php if(isset($_SESSION['error_message'])){ ?>
+                    <div class="alert alert-warning alert-dismissible fade mx-auto show w-75 mt-2" role="alert">
+                        <strong><?= $_SESSION['error_message'] ?></strong>
+                        <!-- <form method="post"> -->
+                        <button type="button" onclick="destroySessionVariable()" name="unsetSession" class=" btn-close close unsetSession" data-bs-dismiss="alert" aria-label="Close">
+                        </button>
+                        <!-- </form> -->
+                    </div>
+                    <?php } ?>
+        <div class="card w-75 mt-2 mx-auto">
             <div class="card-title fs-3 text-center">Product in Branch</div>
             <div class="card-body">
-                <table class="table table-striped  w-50 mx-auto">
+                <table class="table table-striped w-100 mx-auto">
                     <thead>
                         <tr>
                             <th>No.</th>
