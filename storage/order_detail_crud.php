@@ -33,13 +33,13 @@ Order BY order_product.order_date DESC";
 
 function get_search_order_product_with_offset($mysqli, $offset, $limit)
 {
-    $sql = "SELECT * FROM order_product INNER JOIN `user` ON `order_product`.`user_id` = `user`.`user_id`  LIMIT $limit OFFSET $offset";
+    $sql = "SELECT * FROM order_product INNER JOIN `user` ON `order_product`.`user_id` = `user`.`user_id` ORDER BY order_product.order_product_id DESC   LIMIT $limit OFFSET $offset";
     return $mysqli->query($sql);
 
 }
 function get_order_product_with_offset($mysqli, $offset, $limit,$search)
 {
-    $sql = "SELECT * FROM `order_product` INNER JOIN `user` ON `order_product`.`user_id` = `user`.`user_id`  WHERE `user`.`user_name` LIKE '%$search%' LIMIT $limit OFFSET $offset";
+    $sql = "SELECT * FROM `order_product` INNER JOIN `user` ON `order_product`.`user_id` = `user`.`user_id`  WHERE `user`.`user_name` LIKE '%$search%' ORDER BY order_product.order_product_id DESC LIMIT $limit OFFSET $offset";
     return $mysqli->query($sql);
 }
  function pending_order_status($mysqli,$order_detail_id){

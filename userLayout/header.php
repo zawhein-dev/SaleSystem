@@ -29,5 +29,4 @@ require_once("../auth/isLogin.php");
 </head>
 
 <body class="" style="overflow: hidden;">
-
     <div class="main-content row d-flex bg-light">

@@ -12,7 +12,7 @@ if (isset($_COOKIE['user'])) {
     }
 }
 ?>
-<div class="container_fluid bg-white">
+<div class="container-fluid bg-white">
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
         <div class="container-fluid ">
             <a class="navbar-brand mx-5 fs-4 fw-bold" href="../index.php">Electronic Store</a>
@@ -55,7 +55,7 @@ if (isset($_COOKIE['user'])) {
                 </ul>
                 <form method="post">
                 <div class="dropdown">
-                    <a class="navbar-brand dropdown-toggle" href="#" id="profileDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                    <a class="navbar-brand dropdown-toggle me-4" href="#" id="profileDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                     <img src="../assets/userProfile/<?= $currentUser['profile'] ?>" style="width: 60px; height: 60px; border-radius: 50%;" id="profileImage" alt="Image" class="ms-2">
                     </a>
                     <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="profileDropdown">

@@ -11,9 +11,10 @@ $item_array = [];
 if (isset($_SESSION["item_list"])) {
     $item_array = $_SESSION['item_list'];
 }
+
 if (isset($_POST['product_id'])) {
     $product_id = $_POST['product_id'];
-    $branch_id = $_POST['branch_id'];
+    $branch_id = $_POST['b_id'];
     $branch_product = get_branch_product_for_order_detail($mysqli, $product_id, $branch_id);
     $isHave = true;
     $addtocart = true;
@@ -41,3 +42,7 @@ if (isset($_POST['product_id'])) {
 // if(isset($_POST['filter'])){
 //     var_dump($_POST);
 // }
+if (isset($_GET['branch_id'])) {
+    $branch_id = $_GET['branch_id'];
+    $branch = get_branch_with_id($mysqli, $branch_id);
+  }

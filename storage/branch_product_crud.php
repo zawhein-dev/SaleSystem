@@ -112,14 +112,14 @@ function get_product_cart_with_search_data($mysqli, $search,$branch_id,$category
 }
 function get_search_product_cart_with_offset($mysqli, $offset, $limit,$search,$category_id,$branch_id)
 {
-    $sql = "SELECT *,product.* FROM `branch_product`
+    $sql = "SELECT *,product.*,branch_product.branch_id as branch_id FROM `branch_product`
     inner join product on branch_product.product_id = product.product_id 
     WHERE (product.category_id = $category_id AND branch_product.branch_id = $branch_id) OR `product_name` LIKE '%$search%' LIMIT $limit OFFSET $offset";
     return $mysqli->query($sql);
 }
 function get_product_cart_with_offset($mysqli, $offset, $limit,$category_id,$branch_id)
 {
-    $sql = "SELECT *,product.* FROM branch_product
+    $sql = "SELECT *,product.*,branch_product.branch_id as b_id FROM branch_product
     inner join product on branch_product.product_id = product.product_id
     WHERE product.category_id = $category_id AND branch_product.branch_id = $branch_id LIMIT $limit OFFSET $offset";
     return $mysqli->query($sql);

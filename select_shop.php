@@ -14,10 +14,6 @@ if (isset($_COOKIE['user'])) {
     $currentUser = get_user_with_id($mysqli, $user_id);
   }
 }
-if (isset($_GET['branch_id'])) {
-  $branch_id = $_GET['branch_id'];
-  $branch = get_branch_with_id($mysqli, $branch_id);
-}
 $limit = 9;
 $page = isset($_GET['pageNo']) ? intval($_GET['pageNo']) : 1;
 $offset = ($page - 1) * $limit;
@@ -214,7 +210,7 @@ if (isset($_GET['category_id'])) {
       <div class="collapse navbar-collapse ms-5 " id="navbarSupportedContent">
       <form class="d-flex mx-auto w-50" role="search" method="get">
           <input type="hidden" value="<?= $branch_id ?>" name="branch_id">
-          <input class="form-control me-2" name="search_data" type="text" placeholder="Search" aria-label="Search" />
+          <input class="form-control me-2" name="search_data" type="text" placeholder="Search product..." aria-label="Search" />
           <button class="btn btn-outline-success" name="search">
             <i class="bi bi-search"></i>
           </button>
@@ -233,7 +229,7 @@ if (isset($_GET['category_id'])) {
                       <?= $currentUser['user_name']?>
                        <?php  } ?>
                     </li>
-                    <li class="nav-item dropdown align-content-center ms-4">
+                    <li class="nav-item dropdown align-content-center ms-2">
                     <form method="post">
                     <div class="dropdown">
                       <?php if(isset($currentUser)){ ?>
@@ -329,7 +325,7 @@ if (isset($_GET['category_id'])) {
                   <a href="">
                     <form action="" class="me-0" method="POST">
                       <input type="hidden" class="me-0" name="product_id" value="<?= $product['product_id'] ?>">
-                      <input type="hidden" class="me-0" name="branch_id" value="<?= $branch_id ?>">
+                      <input type="hidden" class="me-0" name="b_id" value="<?= $_GET['branch_id'] ?>">
                       <button class="btn btn-sm add-to-cart-link w-0" type="submit" data-bs-toggle="offcanvas"
                         data-bs-target="#offcanvasScrolling" aria-controls="offcanvasScrolling"
                         data-product-id="<?= $product['product_id'] ?>" style="text-decoration: none;">
@@ -344,11 +340,11 @@ if (isset($_GET['category_id'])) {
               </div>
               <div class="card-body">
                 <span class="card-title text-dark fw-bolder"><?= htmlspecialchars($product['product_name']) ?></span>
-                <div class="d-flex justify-content-between">
-                  <span class="card-text">
+                <div class="d-flex justify-content-between mx-0">
+                  <small class="">
                     <?= $product['qty'] == 0 ? "Out of Stock" : "In stock: " . htmlspecialchars($product['qty']) ?>
-                  </span>
-                  <span class="card-text fw-bolder"><?= htmlspecialchars($product['price']) ?> MMK</span>
+                  </small>
+                  <span class="text-danger"><?= htmlspecialchars(number_format($product['price'], 0, ".", ",")) ?> MMK</span>
                 </div>
               </div>
             </div>
@@ -450,7 +446,7 @@ if (isset($_GET['category_id'])) {
           // Hide the offcanvas after 15 seconds
           setTimeout(() => {
             bootstrapOffcanvas.hide();
-          }, 15000);
+          }, 150000);
         }
       }
     });

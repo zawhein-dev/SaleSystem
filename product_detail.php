@@ -1,5 +1,6 @@
 <?php
 require_once("./storage/db.php");
+require_once("./storage/user_crud.php");
 require_once("./storage/product_crud.php");
 require_once("./storage/branch_product_crud.php");
 require_once("./storage/order_product_crud.php");
@@ -7,6 +8,16 @@ require_once("./storage/order_detail_crud.php");
 
 session_start();
 $show = false;
+if (isset($_COOKIE['user'])) {
+    // Decode the JSON string into a PHP associative array
+    $userData = json_decode($_COOKIE['user'], associative: true);
+  
+    // Check if the 'username' key exists and display it
+    if (isset($userData['user_id'])) {
+      $user_id = $userData['user_id'];
+      $currentUser = get_user_with_id($mysqli, $user_id);
+    }
+  }
 if (isset($_GET['product_id'])) {
     $product_id = $_GET['product_id'];
     $branch_id = $_GET['branch_id'];
@@ -90,7 +101,6 @@ if (isset($_POST['submit'])) {
 ?>
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -98,8 +108,12 @@ if (isset($_POST['submit'])) {
     <link rel="stylesheet" href="./assets/css/bootstrap.min.css">
     <script src="./assets/js/bootstrap.min.js"></script>
     <script src="./assets/js/jquery.min.js"></script>
+    <style>
+        #profileDropdown::after {
+        display: none;
+        }
+    </style>
 </head>
-
 <body>
     <?php if ($show) { ?>
         <div>
@@ -142,10 +156,10 @@ if (isset($_POST['submit'])) {
                         <img src="./assets/userProfile/userlogo.jpg" style="width: 60px; height: 60px; border-radius: 50%;" id="profileImage" alt="userImage">
                         </a>-->
                         <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="profileDropdown">
-                            <?php if($currentUser['role'] == 'admin'){ ?>
-                                <li><a class="dropdown-item" href="./user/index.php">Profile</a></li>
-                                <?php } else { ?>
+                            <?php if($currentUser['role'] == 1){ ?>
                                 <li><a class="dropdown-item" href="./admin/index.php">Profile</a></li>
+                                <?php } else { ?>
+                                <li><a class="dropdown-item" href="./user/index.php">Profile</a></li>
                             <?php } ?>
                         </ul>
                     </div>
@@ -155,7 +169,6 @@ if (isset($_POST['submit'])) {
                     <?php if(!isset($currentUser)){ 
                         echo "<a href='./login.php' class='btn border-info me-1'>Login</a>";
                         echo "<a href='./register.php' class='btn border-info ms-1'>Register</a>";
-
                     }?>
                     </li>
                 </ul>
@@ -173,13 +186,13 @@ if (isset($_POST['submit'])) {
                 <div class="right-side col-lg-6 col-sm-12  bg-light">
                     <div class="mt-4 ms-3">
                         <h4><?= $product['product_name'] ?></h4>
-                        <h5><?= $product['category_name'] ?></h5>
+                        <h5><?= $product['category_name'] ?> <small class="text-secondary">category</small></h5>
                         <div class="mb-5 me-5 " style="width: 300px; height: 200px; text-align:justify;">
                             <p><?= $product['description'] ?></p>
                         </div>
                         <div class="mt-4">
                                 <span class="mt-5 mb-4 text-reset fw-bolder fs-6 me-3">Instock: <?= $branch_product['qty'] ?></span>
-                                <span class="mt-5 mb-4 text-reset fw-bolder"><?= $product['price'] ?> MMK</span>
+                                <span class="mt-5 mb-4 text-reset fw-bolder"><?= number_format($product['price'],  0, ".", ",") ?> MMK</span>
                             <form action="" method="POST" class="mt-3">
                                 <input type="hidden" name="currentBranchProductQty" id="currentBranchProductQty" value="<?= $branch_product['qty'] ?>">
                                 <input type="hidden" name="product_id" value="<?= $product_id ?>">
@@ -206,7 +219,6 @@ if (isset($_POST['submit'])) {
             if ($currentBranchProductQty.value > qty.value) {
                 qty.value++;
             }
-            // }
         })
         minus.addEventListener("click", () => {
             if (qty.value != 1) {

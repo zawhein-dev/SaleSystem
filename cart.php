@@ -69,13 +69,21 @@ if (isset($_GET['order'])) {
         $user_id = $userData['user_id'];
         // var_dump($user_id);
         // $currentUser =   get_user_with_id($mysqli, $user_id);
+        
         if (save_order_product($mysqli, $user_id)) {
             $order_product_id = get_last_order_product_id($mysqli);
             $item_array =  $_SESSION["item_list"];
             foreach ($item_array as $index => $item) {
-                $total = $item['qty'] * $item['price'];
-                save_order_detail($mysqli, $order_product_id['order_product_id'], $item['branch_product_id'], $item['qty'], $total);
-                update_qty_when_order_success($mysqli, $item['qty'], $item['branch_product_id']);
+                $current_branch_id = $item['branch_id'];
+                $current_product_id = $item['product_id'];
+                $current_branch_product = get_branch_product_for_order_detail($mysqli, $current_product_id, $current_branch_id);
+                if($current_branch_product['qty'] == 0){
+                  array_splice($item_array, $index, 1);
+                }else{
+                  $total = $item['qty'] * $item['price'];
+                  save_order_detail($mysqli, $order_product_id['order_product_id'], $item['branch_product_id'], $item['qty'], $total);
+                  update_qty_when_order_success($mysqli, $item['qty'], $item['branch_product_id']);
+                }
             }
             unset($_SESSION["item_list"]);
             session_destroy();
@@ -166,7 +174,7 @@ if (isset($_GET['order'])) {
             if (count($item_array) > 0) { ?>
                 <div class="col-8 mt-5 border-rounded">
                     <table class="table table_striped">
-                        <thead>
+                        <thead class="text-center">
                             <th>Branch Name</th>
                             <th>Product Name</th>
                             <th>qty</th>
@@ -180,7 +188,7 @@ if (isset($_GET['order'])) {
                                 $subtotal = $item['price'] * $item['qty'];
                                 $net_total += $subtotal;
                             ?>
-                                <tr>
+                                <tr class="text-center" >
                                     <td><?= $item['branch_name'] ?></td>
                                     <td><?= $item['product_name'] ?></td>
                                     <td>
@@ -189,8 +197,8 @@ if (isset($_GET['order'])) {
                                         <a href="?add=<?= $index ?>&branch_id=<?= $branch_id ?>" class="btn btn-sm btn-primary">+</i></a>
                                         <a href="?remove=<?= $index ?>&branch_id=<?= $branch_id ?>" class="btn btn-sm btn-danger">X</a>
                                     </td>
-                                    <td><?= $item['price'] ?></td>
-                                    <td><?= $subtotal ?></td>
+                                    <td class="text-end"><?=  number_format($item['price'],  0, ".", ",") ?></td>
+                                    <td class="text-end"><?=  number_format($subtotal, 0, ".", ",") ?></td>
                                 </tr>
                             <?php
                             } ?>
@@ -205,7 +213,7 @@ if (isset($_GET['order'])) {
                         <div class="card-body">
                             <div class="d-flex justify-content-between p-3 border-bottom mt-2 mb-2">
                                 <div class="card-text fw-bold ">Subtotal</div>
-                                <div class="card-text fw-medium "><?= $net_total . " MMK" ?></div>
+                                <div class="card-text fw-medium "><?= number_format($net_total, 0, ".", ",") . " MMK" ?></div>
                             </div>
                             <!-- <div class="d-flex justify-content-between p-3 mt-2 mb-2 border-bottom">
                                 <div class="card-text fw-bold">Shipping</div>
@@ -213,12 +221,11 @@ if (isset($_GET['order'])) {
                             </div> -->
                             <div class="d-flex justify-content-between p-3 mt-2 mb-2">
                                 <div class="card-text mb-0 fw-bold fs-5">Total</div>
-                                <div class="card-text fw-medium "><?= $net_total . " MMK" ?></div>
+                                <div class="card-text fw-medium "><?= number_format($net_total, 0, ".", ",") . " MMK" ?></div>
                             </div>
                         </div>
                         <div class="card-footer text-center">
                             <a href="?order" class="btn w-75 btn-success">Order</a>
-
                         </div>
                     </div>
                 </div>

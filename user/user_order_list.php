@@ -47,9 +47,9 @@ require_once("../auth/isLogin.php"); ?>
                         <td><?= $order_detail['product_name']?></td>
                         <td><?= $order_detail['branch_name']?></td>
                         <td><?= $order_detail['category_name']?></td>
-                        <td><?= $order_detail['product_price']?></td>
-                        <td><?= $order_detail['product_qty']?></td>
-                        <td><?= $order_detail['total_price']?></td>
+                        <td><?= number_format($order_detail['product_price'], 0, ".", ",")?></td>
+                        <td><?= number_format($order_detail['product_qty'], 0, ".", ",")?></td>
+                        <td><?= number_format($order_detail['total_price'], 0, ".", ",")?></td>
                     </tr>
                 <?php }  ?>
                 <tr>
@@ -58,7 +58,7 @@ require_once("../auth/isLogin.php"); ?>
                     <td></td>
                     <td></td>
                     <td class="fw-bolder">Total</td>
-                   <td class="fw-bolder"><?= $total ?></td>
+                   <td class="fw-bolder"><?= number_format($total, 0, ".", ",") ?></td>
                 </tr>
                 </tbody>
             </table>
