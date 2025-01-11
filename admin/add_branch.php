@@ -18,24 +18,19 @@ if(isset($_POST['submit'])){
         $branchNameErr = "Please enter branch name..";
         $invalid = false;
     } else
-        if (strlen($branchName) < 3 || strlen($branchName) > 30) {
-            $branchNameErr = "Branch name must be between 3 and 30 characters.";
+        if (strlen($branchName) < 3 || strlen($branchName) > 200) {
+            $branchNameErr = "Branch name must be between 3 and 200 characters.";
             $invalid = false;
         }
         elseif (!preg_match('/^[A-Z]/', $branchName)) {
             $branchNameErr = "Branch name must start with a capital letter.";
             $invalid = false;
         }
-        elseif (!preg_match('/^[A-Z][a-zA-Z ]{2,29}$/', $branchName)) {
-            $branchNameErr = "Branch name can only contain letters and spaces.";
-            $invalid = false;
-        } 
-
     if($address == ""){
         $addressErr = "Please enter address..";
         $invalid = false;
     } else
-    if (strlen($address) < 5 || strlen($address) > 50) {
+    if (strlen($address) < 5 || strlen($address) > 100) {
         $addressErr = "Address must be between 5 and 100 characters.";
         $invalid = false;
     } else 

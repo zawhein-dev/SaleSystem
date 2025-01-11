@@ -45,7 +45,7 @@ if (isset($_GET['order_product_id'])) {
         <div class="card-body">
             <table class="table table-striped  w-100 mx-auto">
                 <thead>
-                    <tr>
+                    <tr class="text-center">
                         <th>Order_Code</th>
                         <th>Product Name</th>
                         <th>Category Name</th>
@@ -64,14 +64,14 @@ if (isset($_GET['order_product_id'])) {
                     while ($order_product = $orders->fetch_assoc()) {
                         $total += $order_product['unit_price'];
                         ?>
-                        <tr>
+                        <tr class="text-center">
                             <td><?= "order_code_" . $order_product['order_product_id'] ?></td>
                             <td><?= $order_product['product_name'] ?></td>
                             <td><?= $order_product['category_name'] ?></td>
                             <td><?= $order_product['branch_name'] ?></td>
-                            <td><?= $order_product['unit_price'] ?></td>
+                            <td class="text-end"><?= number_format($order_product['unit_price'], 0, ".", ",") ?></td>
                             <td><?= $order_product['order_product_qty'] ?></td>
-                            <td><?= $order_product['order_product_price'] ?></td>
+                            <td class="text-end"><?= number_format($order_product['order_product_price'] , 0, ".", ",")?></td>
                             <!-- <td class="text-danger fw-bolder" style="width: 100px;">
                                 <?php if ($order_product['order_product_status'] == 0) {
                                     echo 'On Hold';
@@ -95,9 +95,9 @@ if (isset($_GET['order_product_id'])) {
                     <tr>
                         <td></td>
                     </tr>
-                    <tr>
+                    <tr class="text-center">
                         <td colspan="6" class="text-center fw-bolder fs-6">Total</td>
-                        <td class="fw-bolder fs-6"><?= $total ?></td>
+                        <td class="fw-bolder fs-6 text-end"><?=number_format( $total, 0, ".", ",") ?></td>
                     </tr>
                 </tbody>
             </table>

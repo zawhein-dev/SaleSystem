@@ -2,7 +2,12 @@
 <?php require_once("../layout/navbar.php");
  if (isset($_GET['deleteId'])) {
     $deleteId = $_GET['deleteId'];
-    delete_user($mysqli, $deleteId);
+   $status = delete_user($mysqli, $deleteId);
+   if ($status == 1) {
+    $message = "User successfully deleted";
+   }else{
+    $message = $status;
+   }
 }
 $limit = 3;
 $page = isset($_GET['pageNo']) ? intval($_GET['pageNo']) : 1;
@@ -22,18 +27,16 @@ $numberTitle = ($page * $limit) - $limit;
     }
 ?>
 <div class="main bg-white">
-<?php if(isset($_SESSION['error_message'])){ ?>
-                    <div class="alert alert-warning alert-dismissible fade mx-auto show w-75 mt-2" role="alert">
-                        <strong><?= $_SESSION['error_message'] ?></strong>
-                        <!-- <form method="post"> -->
-                        <button type="button" onclick="destroySessionVariable()" name="unsetSession" class=" btn-close close unsetSession" data-bs-dismiss="alert" aria-label="Close">
-                        </button>
-                        <!-- </form> -->
-                    </div>
-                    <?php } ?>
     <div class="content w-100">
         <div class="card w-75 mt-2 mx-auto">
             <div class="card-title fs-3 text-center">User List</div>
+            <?php if (isset($message)) { ?>
+                    <div class="alert alert-warning alert-dismissible fade mx-auto show w-75 mt-2 mb-0" role="alert">
+                        <strong><?= $message ?></strong>
+                        <button type="button" class=" btn-close close" data-bs-dismiss="alert" aria-label="Close">
+                        </button>
+                    </div>
+                    <?php } ?>
             <div class="card-body">
                 <table class="table table-striped  w-100 mx-auto">
                     <thead>
@@ -75,7 +78,10 @@ $numberTitle = ($page * $limit) - $limit;
                             <td class="align-content-center">
                                 <a href="./add_user.php?user_id=<?= $user['user_id']?>" class="btn btn-sm btn-primary"><i class="fa fa-pen"></i></a>
                                 <a href="./change_password.php?user_id=<?= $user['user_id']?>" class="btn btn-sm btn-primary"><i class="fa fa-key"></i></a>
+                               <?php if($user['user_email'] == $currentUser['user_email']){ ?>
+                                 <?php  }else{ ?>
                                 <button class="btn btn-sm btn-danger deleteUser" data-value="<?= $user['user_id']?>" data-bs-toggle="modal" data-bs-target="#deleteModal"><i class="fa fa-trash"></i></button>
+                               <?php }?>
                             </td>
                         </tr>
                         <?php 

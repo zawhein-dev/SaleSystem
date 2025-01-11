@@ -56,7 +56,6 @@ if ($branches->num_rows > 0): ?>
             endwhile; 
             ?>
         </div>
-
         <!-- Slides -->
         <div class="carousel-inner">
             <?php 

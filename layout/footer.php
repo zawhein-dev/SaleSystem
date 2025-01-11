@@ -21,21 +21,9 @@
     </div>
 </div>
 <script src="../assets/js/bootstrap.min.js"></script>
-    <script src="../assets/js/jquery.min.js"></script>
+<script src="../assets/js/jquery.min.js"></script>
 <script>
-  function destroySessionVariable() {
-    var xhr = new XMLHttpRequest();
-    xhr.open("get", "../sessionDestory.php", true);
-    xhr.onreadystatechange = function() {
-      if (xhr.readyState == 4 && xhr.status == 200) {
-        console.log("Session variable destroyed");
-      }
-    };
-    xhr.send();
-  }
   
-  // Example of calling the function
-  destroySessionVariable();
     let deleteUser = $(".deleteUser");
     let deleteBtn = $("#deleteBtn");
     let closeBtn = $("#closeBtn");

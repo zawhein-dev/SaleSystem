@@ -33,15 +33,6 @@ if (isset($_COOKIE['user'])) {
                             <li><a class="dropdown-item" href="../user/order_cancel.php">Order Cancel</a></li>
                         </ul>
                     </li>
-                    <li class="nav-item dropdown  mx-3">
-                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                            Account Details
-                        </a>
-                        <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                            <li><a class="dropdown-item" href="../user/edit.php">Edit account</a></li>
-                            <li><a class="dropdown-item" href="../user/change_password.php">Change Password</a></li>
-                        </ul>
-                    </li>
                     <li class="nav-item dropdown search-bar mx-3">
                         <form action="" class="form-input-group" method="get">
                             <div class="d-flex">
@@ -55,6 +46,9 @@ if (isset($_COOKIE['user'])) {
                 </ul>
                 <form method="post">
                 <div class="dropdown">
+                    <?php if(isset($currentUser)){ ?>
+                      <?= $currentUser['user_name']?>
+                       <?php  } ?>
                     <a class="navbar-brand dropdown-toggle me-4" href="#" id="profileDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                     <img src="../assets/userProfile/<?= $currentUser['profile'] ?>" style="width: 60px; height: 60px; border-radius: 50%;" id="profileImage" alt="Image" class="ms-2">
                     </a>

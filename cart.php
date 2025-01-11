@@ -106,18 +106,19 @@ if (isset($_GET['order'])) {
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
     integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg=="
     crossorigin="anonymous" referrerpolicy="no-referrer" />
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"
-    integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g=="
-    crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
-    <link rel="stylesheet" href="./assets/css/bootstrap.min.css">
-    <script src="./assets/js/bootstrap.min.js"></script>
-    <script src="./assets/js/jquery.min.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
+    
+      <link rel="stylesheet" href="./assets/css/bootstrap.min.css">
+    <style>
+        #profileDropdown::after {
+        display: none;
+        }
+    </style>
 </head>
 <body class="bg-white">
     <nav class="navbar navbar-expand-lg bg-light">
     <div class="container">
-      <a class="navbar-brand fw-bolder" href="./index.php"><?php echo $branch['branch_name'] . " Branch" ?></a>
+      <a class="navbar-brand fw-bolder" href="./index.php">Electronic Store</a>
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent"
         aria-controls="navbarContent" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
@@ -133,36 +134,39 @@ if (isset($_GET['order'])) {
         </form>  -->
         <div class="d-flex align-items-center">
           <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-            <!-- <li class="nav-item position-relative mt-2 me-3">
-              <a class="nav-link" href="./cart.php?branch_id=<?= $_GET['branch_id'] ?>">
-                <i class="bi bi-cart fs-4"></i>
-                <span class="position-absolute top-2 start-100 translate-middle badge rounded-pill bg-danger">
-                 
-                   7
-                </span>
-              </a>
-            </li> -->
-            <li class="nav-item">
-              <a class="nav-link" href="#">
-                <span class="d-flex">
-                  <span class="<?php if (isset($currentUser)) { echo "nav-link"; } ?>">
-                    <?php if (isset($currentUser)) {
-                      echo "<span class='mt-4'>".$currentUser['user_name']."</span>";
-                    } else {
-                   echo "<a href='./login.php' class='btn btn-sm btn-success mb-2'>Login</a>";
-                    } ?> 
-                  </span>
-                  <span>
-                    <?php if (isset($currentUser)) { ?>
-                      <img src="./assets/userProfile/<?= $currentUser['profile'] ?>"
-                        style="width: 50px; height: 50px; border-radius: 50%;" id="profileImage" alt="Image">
-                    <?php } else {
-                       echo "<a href='./register.php' class='btn btn-sm btn-info mb-2'>Register</a>";
-                   } ?>
-                  </span>
-                </span>
-              </a>
+                    <li class="nav-item dropdown align-content-center">
+                    <?php if(isset($currentUser)){ ?>
+                      <?= $currentUser['user_name']?>
+                       <?php  } ?>
+                    </li>
+                    <li class="nav-item dropdown align-content-center ms-3">
+                <form method="post">
+                    <div class="dropdown">
+                        <?php 
+                        if(isset($currentUser)){ ?>
+                            <a class="navbar-brand dropdown-toggle" id="profileDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                <img src="./assets/userProfile/<?= $currentUser['profile'] ?>" 
+                                     style="width: 60px; height: 60px; border-radius: 50%;" 
+                                     id="profileImage" 
+                                     alt="userImage">
+                            </a>
+                        <?php } ?>
+                        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="profileDropdown">
+                            <?php if($currentUser['role'] == 1){ ?>
+                                <li><a class="dropdown-item" href="./admin/index.php">Admin Profile</a></li>
+                            <?php } else { ?>
+                                <li><a class="dropdown-item" href="./user/index.php">User Profile</a></li>
+                            <?php } ?>
+                        </ul>
+                    </div>
+                </form>
             </li>
+                    <li class="nav-item dropdown align-content-center">
+                    <?php if(!isset($currentUser)){ 
+                        echo "<a href='./login.php' class='btn border-info me-1'>Login</a>";
+                        echo "<a href='./register.php' class='btn border-info ms-1'>Register</a>";
+                    }?>
+                    </li> 
           </ul>
         </div>
       </div>
@@ -236,9 +240,14 @@ if (isset($_GET['order'])) {
                 <div>There is no product in cart</div>
         <?php } ?>
     </div>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+    <!-- <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
     integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
-    crossorigin="anonymous"></script>
+    crossorigin="anonymous"></script> -->
+    <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"
+      integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g=="
+      crossorigin="anonymous" referrerpolicy="no-referrer"></script> -->
+      <script src="./assets/js/bootstrap.min.js"></script>
+      <script src="./assets/js/jquery.min.js"></script>
 </body>
 
 </html>

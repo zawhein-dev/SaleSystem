@@ -35,7 +35,7 @@ $numberTitle = ($page * $limit) - $limit;
                     </div>
                     <?php } ?>
         <div class="card w-75 mt-2 mx-auto">
-            <div class="card-title fs-3 text-center">Branch List</div>
+            <div class="card-title fs-3 text-center">Category List</div>
             <div class="card-body">
                 <table class="table table-striped  w-100 mx-auto">
                     <thead>

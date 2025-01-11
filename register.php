@@ -1,10 +1,12 @@
-<?php require_once("./storage/db.php"); ?>
-<?php require_once("./storage/user_crud.php");
+<?php require_once("./storage/db.php"); 
+require_once("./storage/user_crud.php");
 require_once("./storage/order_product_crud.php");
 require_once("./storage/order_detail_crud.php");
 require_once("./storage/branch_product_crud.php");
 session_start();
-$item_array = $_SESSION["item_list"];
+if(isset($_SESSION['item_list'])){
+    $item_array = $_SESSION["item_list"];
+}
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -33,10 +35,20 @@ if (isset($_POST['submit'])) {
     if ($userName == "") {
         $userNameErr = "User name cann't be blank!";
         $invalid = false;
+    } else {
+        if (!preg_match('/^[a-zA-Z0-9]{1,30}$/', $userName)) {
+            $userNameErr = "Invalid username";
+            $invalid = false;
+        }
     }
     if ($userEmail == "") {
         $userEmailErr = "User email cann't be blank!";
         $invalid = false;
+    } else {
+        if (!preg_match("/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/ ", $userEmail)) {
+            $userEmailErr = "Please enter valid email format!";
+            $invalid = false;
+        }
     }
     if ($fileName == "") {
         $fileNameErr = "Please choose photo for profile picture!";
@@ -45,6 +57,11 @@ if (isset($_POST['submit'])) {
     if ($password == "") {
         $passwordErr = "Password cann't be blank!";
         $invalid = false;
+    } else {
+        if (!preg_match('/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{8,20}$/', $password)) {
+            $passwordErr = "Invalid password format (Hein@123)";
+            $invalid = false;
+        } 
     }
     if ($confirmPassword == "") {
         $confirmPasswordErr = "Confirm Password cann't be blank!";
@@ -73,7 +90,6 @@ if (isset($_POST['submit'])) {
                             $total = $item['qty'] * $item['price'];
                             save_order_detail($mysqli, $order_product_id['order_product_id'], $item['branch_product_id'], $item['qty'], $total);
                             update_qty_when_order_success($mysqli, $item['qty'], $item['branch_product_id']);
-
                         }
                         $_SESSION["item_list"] = [];
                         header("Location:./home.php");
@@ -84,6 +100,7 @@ if (isset($_POST['submit'])) {
             }
         } else {
             $fail_query = $status;
+            echo $fail_query;
         }
     }
 }
@@ -105,36 +122,42 @@ if (isset($_POST['submit'])) {
             <div class="card-body">
                 <h4 class="text-center">Register Form</h4>
                 <form method="post" enctype="multipart/form-data">
-                    <label for="userName" class="">User Name</label>
-                    <input name="userName" class="form-control <?php echo !empty($userNameErr) ? 'is-invalid' : ''; ?>" value="<?= $userName ?>" type="text" id="userName" placeholder="Enter user name">
-                    <div class="invalid-feedback"><?php echo $userNameErr; ?></div>
-
-                    <label for="userEmail" class="">Email address</label>
-                    <input name="userEmail" class="form-control <?php echo !empty($userEmailErr) ? 'is-invalid' : ''; ?>" value="<?= $userEmail ?>" type="text" id="userEmail" placeholder="useremail@gmail.com">
-                    <div class="invalid-feedback"><?php echo $userEmailErr; ?></div>
-
-                    <label for="userProfile" class="form-label">Profile</label>
-                    <input type="file" class="form-control <?php echo !empty($fileNameErr) ? 'is-invalid' : ''; ?>" value="<?= $fileName ?>" name="userProfile" id="userProfile">
-                    <div class="invalid-feedback"><?php echo $fileNameErr; ?></div>
-
-                    <label for="password" class="">Password</label>
-                    <input name="password" class="form-control <?php echo !empty($passwordErr) ? 'is-invalid' : ''; ?>" value="<?= $password ?>" type="password" id="password" placeholder="Password">
-                    <div class="invalid-feedback"><?php echo $passwordErr; ?></div>
-
-                    <input type="checkbox" id="showPassword" class="form-check-input">
-                    <label class="form-check-label" for="showPassword">Show Password</label>
-
-                    <label for="confirmPassword" class="">Confirm Password</label>
-                    <input name="confirmPassword" class="form-control <?php echo !empty($confirmPasswordErr) ? 'is-invalid' : ''; ?>" value="<?= $confirmPassword ?>" type="password" id="confirmPassword" placeholder="Confirm password">
-                    <div class="invalid-feedback"><?php echo $confirmPasswordErr; ?></div>
-
-                    <input type="checkbox" id="showConfirmPassword" class="form-check-input">
-                    <label class="form-check-label" for="showConfirmPassword">Show Confirm Password</label>
-
+                    <div class="form-input-group my-1">
+                        <label for="userName" class="">User Name</label>
+                        <input name="userName" class="form-control <?php echo !empty($userNameErr) ? 'is-invalid' : ''; ?>" value="<?= $userName ?>" type="text" id="userName" placeholder="Enter user name">
+                        <div class="invalid-feedback"><?php echo $userNameErr; ?></div>
+                    </div>
+                    <div class="form-input-group my-1">
+                        <label for="userEmail" class="">Email address</label>
+                        <input name="userEmail" class="form-control <?php echo !empty($userEmailErr) ? 'is-invalid' : ''; ?>" value="<?= $userEmail ?>" type="text" id="userEmail" placeholder="useremail@gmail.com">
+                        <div class="invalid-feedback"><?php echo $userEmailErr; ?></div>
+                    </div>
+                    <div class="form-input-group my-1">
+                        <label for="userProfile" class="form-label">Profile</label>
+                        <input type="file" class="form-control <?php echo !empty($fileNameErr) ? 'is-invalid' : ''; ?>" value="<?= $fileName ?>" name="userProfile" id="userProfile">
+                        <div class="invalid-feedback"><?php echo $fileNameErr; ?></div>
+                    </div>
+                    <div class="form-input-group my-1">
+                        <label for="password" class="">Password</label>
+                        <input name="password" class="form-control <?php echo !empty($passwordErr) ? 'is-invalid' : ''; ?>" value="<?= $password ?>" type="password" id="password" placeholder="Password">
+                        <div class="invalid-feedback"><?php echo $passwordErr; ?></div>
+                    </div>
+                    <div class="form-input-group my-1">
+                        <input type="checkbox" id="showPassword" class="form-check-input">
+                        <label class="form-check-label" for="showPassword">Show Password</label>
+                    </div>
+                    <div class="form-input-group my-1">
+                        <label for="confirmPassword" class="">Confirm Password</label>
+                        <input name="confirmPassword" class="form-control <?php echo !empty($confirmPasswordErr) ? 'is-invalid' : ''; ?>" value="<?= $confirmPassword ?>" type="password" id="confirmPassword" placeholder="Confirm password">
+                        <div class="invalid-feedback"><?php echo $confirmPasswordErr; ?></div>
+                    </div>
+                    <div class="form-input-group my-1">
+                        <input type="checkbox" id="showConfirmPassword" class="form-check-input">
+                        <label class="form-check-label" for="showConfirmPassword">Show Confirm Password</label>
+                    </div>
                     <div class="text-center mt-3">
                         <button class="btn btn-success w-25" name="submit">Submit</button>
                     </div>
-
                     <div class="text-center mt-3">
                         <a>Do you have an account?</a>
                         <a href="./login.php" class="btn fs-6 text-primary">Login Here</a>

@@ -20,24 +20,29 @@ if(isset($_POST['submit'])){
     $productName = test_input($_POST['productName']);
     $price = test_input($_POST['price']);
     $description = test_input($_POST['description']);
-    $category = test_input($_POST['category']);
-
-$maxSize = 5 * 1024 * 1024; 
+    $category = test_input( isset($_POST['category']) ? $_POST['category'] : '');
+    // var_dump($category);
+    $category_id = get_category_with_id($mysqli, $category);
+   if($category_id == null){
+    $categoryErr = "Select category plz";
+    $invalid = false;
+   }
+$maxSize = 2 * 1024 * 1024; 
 $allowedTypes = ['image/jpeg', 'image/png', 'image/gif'];
-if (isset($_FILES['photo']) && $_FILES['photo']['error'] === UPLOAD_ERR_OK) {
-    $file = $_FILES['photo'];
+$file = $_FILES['photo'];
     $photoTmpPath = $file['tmp_name'];
     $photoName = $file['name'];
     $photoSize = $file['size'];
     $photoType = $file['type'];
+if (isset($_FILES['photo']) && $_FILES['photo']['error'] === UPLOAD_ERR_OK) {
     $imageInfo = getimagesize($photoTmpPath);
     if ($imageInfo === false) {
         $photoErr = "Error: The file is not a valid image.";
     }
-    elseif (!in_array($fileType, $allowedTypes)) {
+    elseif (!in_array($photoType, $allowedTypes)) {
         $photoErr =  "Error: Only JPEG, PNG, or GIF files are allowed.";
     }
-    elseif ($fileSize > $maxSize) {
+    elseif ($photoSize > $maxSize) {
         $photoErr =  "Error: File size exceeds the 5MB limit.";
     }
 } else {
@@ -56,10 +61,6 @@ if (isset($_FILES['photo']) && $_FILES['photo']['error'] === UPLOAD_ERR_OK) {
             $productNameErr = "Product name must start with a capital letter.";
             $invalid = false;
         }
-        elseif (!preg_match('/^[A-Z][a-zA-Z ]{2,29}$/', $productName)) {
-            $productNameErr = "Product name can only contain letters and spaces.";
-            $invalid = false;
-        } 
 
     if(isset($_GET['product_id'])){
         $uniqueProductName = get_product_with_name_and_id($mysqli,$productName,$product_id);
@@ -101,7 +102,7 @@ if (isset($_FILES['photo']) && $_FILES['photo']['error'] === UPLOAD_ERR_OK) {
         $invalid = false;
     }
     if($category == ""){
-        $categoryErr = "Please choose category name....";
+        $categoryErr = "Please select category name....";
         $invalid = false;
     }
     if($invalid){

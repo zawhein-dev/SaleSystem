@@ -1,9 +1,7 @@
-<?php require_once("./storage/db.php"); ?>
+<?php 
+    require_once("./storage/db.php");
+    require_once("./storage/user_crud.php");
 
-
-<?php require_once("./storage/user_crud.php"); ?>
-
-<?php
 if (isset($_COOKIE['user'])) {
     header("location:./home.php");
 }
@@ -26,7 +24,7 @@ if (isset($_POST['submit'])) {
     if ($invalid == true) {
         $user = get_user_with_email($mysqli, $userEmail);
         if (!$user) {
-            $userEmailErr = "Email does not match";
+            $userEmailErr = "Incorrect email. Don't have account Please Sign up first";
         } else {
             if (password_verify($password, $user['password'])) {
                 setcookie("user", json_encode($user), time() + 60 * 60 * 24 * 30, "/");

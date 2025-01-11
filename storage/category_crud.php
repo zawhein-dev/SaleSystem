@@ -7,7 +7,7 @@ function save_category($mysqli, $categoryName, $description)
 
 function get_category_with_id($mysqli, $category_id)
 {
-    $sql = "SELECT * FROM `category` WHERE `category_id`  = $category_id";
+    $sql = "SELECT * FROM `category` WHERE `category_id` = '$category_id'";
     $category = $mysqli->query($sql);
     return $category->fetch_assoc();
 }
@@ -39,7 +39,8 @@ function get_category($mysqli)
 {
     $sql = "SELECT * FROM `category`";
     return $mysqli->query($sql);
-}
+} 
+
 function delete_category($mysqli, $deleteId)
 {
     $sql = "DELETE FROM `category` WHERE `category_id`= $deleteId";

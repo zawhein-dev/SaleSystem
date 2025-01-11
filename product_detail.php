@@ -7,6 +7,9 @@ require_once("./storage/order_product_crud.php");
 require_once("./storage/order_detail_crud.php");
 
 session_start();
+if(isset($_SESSION['item_list'])){
+    $item_array = $_SESSION['item_list'];
+}
 $show = false;
 if (isset($_COOKIE['user'])) {
     // Decode the JSON string into a PHP associative array
@@ -106,6 +109,10 @@ if (isset($_POST['submit'])) {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SaleSystem</title>
     <link rel="stylesheet" href="./assets/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
+    integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg=="
+    crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet" />
     <script src="./assets/js/bootstrap.min.js"></script>
     <script src="./assets/js/jquery.min.js"></script>
     <style>
@@ -115,11 +122,6 @@ if (isset($_POST['submit'])) {
     </style>
 </head>
 <body>
-    <?php if ($show) { ?>
-        <div>
-            <a href="./cart.php?branch_id=<?= $branch_post_id ?>" </a> View Cart!</a> The product you choose is already exist in cart.
-        </div>
-    <?php  } ?>
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
     <div class="container justify-content-between">
         <div>
@@ -131,20 +133,22 @@ if (isset($_POST['submit'])) {
       </div>
       <div>
       <div class="collapse navbar-collapse ms-5" id="navbarSupportedContent">
-      <!-- <form class="d-flex mx-auto w-50" role="search" method="get">
-          <input type="hidden" value="<?= $branch_id ?>" name="branch_id">
-          <input class="form-control me-2" name="search_data" type="text" placeholder="Search" aria-label="Search" />
-          <button class="btn btn-outline-success" name="search">
-            <i class="bi bi-search"></i>
-          </button>
-        </form> -->
         <ul class="navbar-nav me-auto mb-2 mb-lg-0 ">
+                    <li class="nav-item position-relative mt-2 me-3">
+                              <a class="nav-link" href="./cart.php?branch_id=<?= $_GET['branch_id'] ?>">
+                                <i class="bi bi-cart fs-4"></i>
+                                <span class="position-absolute top-2 start-100 translate-middle badge rounded-pill bg-danger">
+                                  <?= count($item_array) ?>
+                                </span>
+                    </a>
+                    </li>   
                     <li class="nav-item dropdown align-content-center">
                     <?php if(isset($currentUser)){ ?>
                       <?= $currentUser['user_name']?>
                        <?php  } ?>
                     </li>
-                    <li class="nav-item dropdown align-content-center ms-4">
+                    
+                    <li class="nav-item dropdown align-content-center ms-2">
                     <form method="post">
                     <div class="dropdown">
                       <?php if(isset($currentUser)){ ?>
@@ -176,8 +180,16 @@ if (isset($_POST['submit'])) {
       </div>
     </div>
   </nav>
-            <div class="container-fluid">
-            <div class="row my-3">
+        
+    <?php if ($show) { ?>
+        <div class="text-center align-content-center">
+            <div class="mx-auto w-50">
+                <p class="text-dark"><a href="./cart.php?branch_id=<?= $branch_post_id ?>">View Cart!</a> The product you choose is already exist in cart.</p>
+            </div>
+        </div>
+    <?php  } ?>
+            <div class="container-fluid mt-2">
+            <div class="row mb-3">
                 <div class="left-side col-lg-6 col-sm-12 bg-white">
                     <div class="w-75 mx-auto align-content-center bg-light " style="height: 80vh;">
                         <img src="./assets/product/<?= $product['photo'] ?>" class="img-fluid mt-2 mb-2" style="height: 400px; width: 90%;margin-left: 5%; margin-right: 5%;" alt="product">

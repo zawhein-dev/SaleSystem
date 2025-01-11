@@ -14,7 +14,7 @@ if (isset($_COOKIE['user'])) {
     $currentUser = get_user_with_id($mysqli, $user_id);
   }
 }
-$limit = 9;
+$limit = 12;
 $page = isset($_GET['pageNo']) ? intval($_GET['pageNo']) : 1;
 $offset = ($page - 1) * $limit;
 $numberTitle = ($page * $limit) - $limit;
@@ -25,18 +25,18 @@ if (isset($_GET['category_id'])) {
     $search = $_GET['search_data'];
     $row = get_product_cart_with_search_data($mysqli, $search, $branch_id, $category_id);
     $row_count = COUNT($row->fetch_all());
-    $pagination_link = ceil($row_count / 9);
+    $pagination_link = ceil($row_count / 12);
     $product_in_branch = get_search_product_cart_with_offset($mysqli, $offset, $limit, $search, $category_id, $branch_id);
   } else {
     $row = get_branch_product_with_category_id($mysqli, $category_id, $branch_id);
     $row_count = COUNT($row->fetch_all()); //get number of users
-    $pagination_link = ceil($row_count / 9);
+    $pagination_link = ceil($row_count / 12);
     $product_in_branch = get_product_cart_with_offset($mysqli, $offset, $limit, $category_id, $branch_id);
   }
   // $product_in_branch = get_branch_product_with_category_id($mysqli, $_GET['category_id'], $_GET['branch_id']);
 } else
   if (!isset($_GET['category_id'])) {
-    $limit = 9;
+    $limit = 12;
     $page = isset($_GET['pageNo']) ? intval($_GET['pageNo']) : 1;
     $offset = ($page - 1) * $limit;
     $numberTitle = ($page * $limit) - $limit;
@@ -45,12 +45,12 @@ if (isset($_GET['category_id'])) {
       $search = $_GET['search_data'];
       $row = get_product_in_branch_with_search_data($mysqli, $search, $branch_id);
       $row_count = COUNT($row->fetch_all());
-      $pagination_link = ceil($row_count / 9);
+      $pagination_link = ceil($row_count / 12);
       $product_in_branch = get_product_in_branch_with_offset($mysqli, $offset, $limit, $search, $branch_id);
     } else {
       $row = get_product_in_branch($mysqli, $branch_id);
       $row_count = COUNT($row->fetch_all()); //get number of users
-      $pagination_link = ceil($row_count / 9);
+      $pagination_link = ceil($row_count / 12);
       $product_in_branch = get_search_product_in_branch_with_offset($mysqli, $offset, $limit, $branch_id);
     }
     // $product_in_branch = get_product_in_branch($mysqli, $branch_id);
@@ -201,7 +201,7 @@ if (isset($_GET['category_id'])) {
 
 <body style="background-color: white">
   <nav class="navbar navbar-expand-lg navbar-light bg-light">
-    <div class="container-fluid ">
+    <div class="container">
       <a class="navbar-brand mx-5 fs-4 fw-bold" href="./index.php">Electronic Store</a>
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
         aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
@@ -244,7 +244,8 @@ if (isset($_GET['category_id'])) {
                           <?php if($currentUser['role'] == 1){ ?>
                             <li><a class="dropdown-item" href="./admin/index.php">Profile</a></li>
                             <?php } else { ?>
-                            <li><a class="dropdown-item" href="./user/index.php">Profile</a></li>
+                            <li><a class="dropdown-item" href="./user/profile.php">Profile</a></li>
+                            <li><a class="dropdown-item" href="./user/index.php">Orders</a></li>
                               <?php } ?>
                         </ul>
                     </div>
@@ -301,12 +302,17 @@ if (isset($_GET['category_id'])) {
 
       </ul>
     </div>
-
     <!-- Right Side: Product cards -->
+        <?php if($product_in_branch->num_rows  ==  0){?>
+         <div class="col-12 col-lg-9">
+            <div class="text-center align-content-center mx-auto h-75">
+             <div class="my-auto fs-2"> There is no products</div>
+            </div>
+         </div>
+          <?php  }else{?>
     <div class="col-12 col-lg-9 p-3">
       <div class="row row-cols-1 row-cols-md-4 g-4">
         <?php
-
         while ($product = $product_in_branch->fetch_assoc()) { ?>
           <div class="col">
             <div class="card">
@@ -333,9 +339,6 @@ if (isset($_GET['category_id'])) {
                       </button>
                     </form>
                   </a>
-                  <!-- <a href="#">
-                                    <i class="bi bi-cart-plus icon fs-6 text-white" title="Add to Cart"></i>
-                                </a> -->
                 </div>
               </div>
               <div class="card-body">
@@ -406,8 +409,8 @@ if (isset($_GET['category_id'])) {
         </nav>
       <?php } ?>
     </div>
-  </div>
-
+    <?php } ?>
+    </div>
 
   <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasScrolling" aria-labelledby="offcanvasScrollingLabel">
     <div class="offcanvas-header">
@@ -446,19 +449,17 @@ if (isset($_GET['category_id'])) {
           // Hide the offcanvas after 15 seconds
           setTimeout(() => {
             bootstrapOffcanvas.hide();
-          }, 150000);
+          }, 1500);
         }
       }
     });
-  </script>
-  <script>document.addEventListener("DOMContentLoaded", () => {
+    document.addEventListener("DOMContentLoaded", () => {
       const listItems = document.querySelectorAll(".list-group-item");
 
       listItems.forEach(item => {
         item.addEventListener("click", () => {
           // Remove the active class from all items
           listItems.forEach(li => li.classList.remove("active-item"));
-          // Add the active class to the clicked item
           item.classList.add("active-item");
         });
       });
