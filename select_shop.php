@@ -449,7 +449,7 @@ if (isset($_GET['category_id'])) {
           // Hide the offcanvas after 15 seconds
           setTimeout(() => {
             bootstrapOffcanvas.hide();
-          }, 1500);
+          }, 15000);
         }
       }
     });

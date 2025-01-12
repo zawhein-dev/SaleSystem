@@ -20,11 +20,16 @@ if (isset($_GET['accept'])) {
     if ($order_product_status['status'] == 3) {
         $branch_product_qty = get_branch_product_id_when_order_cancel($mysqli, $order_product_id);
         $should_execute_queries = true; 
+    // while($result = $branch_product_qty->fetch_assoc()){
+    //     var_dump($result['qty']);
+    // }
+        
         while ($result = $branch_product_qty->fetch_assoc()) {
             $update_branch_product_data = $result['branch_product_id'];
             $update_branch_product_qty = $result['qty'];
             $instock = get_qty_with_branch_product_id($mysqli, $update_branch_product_data);
-            if ($instock['qty'] == 0) {
+            $estimate = $instock['qty'] - $update_branch_product_qty;
+            if ( $estimate < 0 || $instock['qty'] == 0 ) {
                 $should_execute_queries = false; 
                 break; 
             }
@@ -67,10 +72,10 @@ if (isset($_GET['ready'])) {
             $update_branch_product_qty = $result['qty'];
             $instock = get_qty_with_branch_product_id($mysqli, $update_branch_product_data);
         
-            // Check if any $instock['qty'] equals 0
-            if ($instock['qty'] == 0) {
-                $should_execute_queries = false; // Set the flag to false
-                break; // Exit the loop as we no longer need to process further
+            $estimate = $instock['qty'] - $update_branch_product_qty;
+            if ( $estimate < 0 || $instock['qty'] == 0 ) {
+                $should_execute_queries = false; 
+                break; 
             }
         }
         if ($should_execute_queries) {
@@ -114,10 +119,10 @@ if (isset($_GET['pending'])) {
             $update_branch_product_qty = $result['qty'];
             $instock = get_qty_with_branch_product_id($mysqli, $update_branch_product_data);
         
-            // Check if any $instock['qty'] equals 0
-            if ($instock['qty'] == 0) {
-                $should_execute_queries = false; // Set the flag to false
-                break; // Exit the loop as we no longer need to process further
+            $estimate = $instock['qty'] - $update_branch_product_qty;
+            if ( $estimate < 0 || $instock['qty'] == 0 ) {
+                $should_execute_queries = false; 
+                break; 
             }
         }
         if ($should_execute_queries) {

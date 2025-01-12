@@ -8,6 +8,9 @@ require_once("./storage/branch_crud.php");
 require_once("./storage/user_crud.php");
 
 session_start();
+if(isset($_SESSION["item_list"])){
+    $item_array =  $_SESSION["item_list"];
+}
 if (isset($_COOKIE['user'])) {
     // Decode the JSON string into a PHP associative array
     $userData = json_decode($_COOKIE['user'], associative: true);

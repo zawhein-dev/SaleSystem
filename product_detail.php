@@ -91,7 +91,7 @@ if (isset($_POST['submit'])) {
             }
         }
         if ($isHave) {
-            array_push($item_array, ['product_id' => $branch_product['product_id'], 'branch_product_id' => $branch_product['branch_product_id'], 'product_name' => $branch_product['product_name'], 'price' => $branch_product['price'], 'branch_name' => $branch_product['branch_name'], 'qty' => $qty]);
+            array_push($item_array, ['product_id' => $branch_product['product_id'], 'branch_product_id' => $branch_product['branch_product_id'], 'product_name' => $branch_product['product_name'], 'price' => $branch_product['price'], 'branch_name' => $branch_product['branch_name'], 'qty' => $qty,'branch_id' => $branch_product['branch_id']]);
             $_SESSION["item_list"] = $item_array;
             header("location:cart.php?branch_id=" . $branch_post_id);
         } else {
@@ -138,7 +138,7 @@ if (isset($_POST['submit'])) {
                               <a class="nav-link" href="./cart.php?branch_id=<?= $_GET['branch_id'] ?>">
                                 <i class="bi bi-cart fs-4"></i>
                                 <span class="position-absolute top-2 start-100 translate-middle badge rounded-pill bg-danger">
-                                  <?= count($item_array) ?>
+                                  <?php if(isset($item_array)){ echo count($item_array);} else{ echo "0";} ?>
                                 </span>
                     </a>
                     </li>   
