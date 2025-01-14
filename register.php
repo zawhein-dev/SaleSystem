@@ -36,7 +36,7 @@ if (isset($_POST['submit'])) {
         $userNameErr = "User name cann't be blank!";
         $invalid = false;
     } else {
-        if (!preg_match('/^[a-zA-Z0-9]{1,30}$/', $userName)) {
+        if (!preg_match('/^[A-Za-z][A-Za-z0-9 ]*$/', $userName)) {
             $userNameErr = "Invalid username";
             $invalid = false;
         }
@@ -45,7 +45,7 @@ if (isset($_POST['submit'])) {
         $userEmailErr = "User email cann't be blank!";
         $invalid = false;
     } else {
-        if (!preg_match("/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/ ", $userEmail)) {
+        if (filter_var($userEmail, FILTER_VALIDATE_EMAIL) === false) {
             $userEmailErr = "Please enter valid email format!";
             $invalid = false;
         }
@@ -83,19 +83,47 @@ if (isset($_POST['submit'])) {
                 $user = get_user_with_email($mysqli, $userEmail);
                 setcookie("user", json_encode($user), time() + 60 * 60 * 24 * 30, "/");
                 if (isset($_GET['order'])) {
-                    if (save_order_product($mysqli, $user['user_id'])) {
-                        $order_product_id = get_last_order_product_id($mysqli);
-                        $item_array =  $_SESSION["item_list"];
-                        foreach ($item_array as $index => $item) {
-                            $total = $item['qty'] * $item['price'];
-                            save_order_detail($mysqli, $order_product_id['order_product_id'], $item['branch_product_id'], $item['qty'], $total);
-                            update_qty_when_order_success($mysqli, $item['qty'], $item['branch_product_id']);
-                        }
-                        $_SESSION["item_list"] = [];
-                        header("Location:./home.php");
+                    $index = 0;
+                    $excuteQuery = true; // Default value for $excuteQuery
+                    $item_count = count($item_array); // Total number of items in the array
+                    while ($index < $item_count) {
+                    $item = $item_array[$index]; // Access the current item
+                    $current_branch_id = $item['branch_id'];
+                    $current_product_id = $item['product_id'];
+                    $current_branch_product = get_branch_product_for_order_detail($mysqli, $current_product_id, $current_branch_id);
+            
+                    if ($current_branch_product['qty'] == 0) {
+                        $excuteQuery = false; 
+                        break;
                     }
+            
+                    $index++; // Move to the next item
+                    }
+            
+                    if($excuteQuery == true){
+                        if (save_order_product($mysqli, $user['user_id'])) {
+                            $order_product_id = get_last_order_product_id($mysqli);
+                            $item_array =  $_SESSION["item_list"];
+                            foreach ($item_array as $index => $item) {
+                                $total = $item['qty'] * $item['price'];
+                                save_order_detail($mysqli, $order_product_id['order_product_id'], $item['branch_product_id'], $item['qty'], $total);
+                                update_qty_when_order_success($mysqli, $item['qty'], $item['branch_product_id']);
+                            }
+                            // $_SESSION["item_list"] = []; // initial state is true
+                            unset($_SESSION["item_list"]);
+                            session_destroy();
+                            header("Location:./home.php");
+                        }
+                    } else{
+                        unset($_SESSION["item_list"]);
+                        session_destroy();
+                        header("Location:select_shop.php?orderByOther&branch_id=".$_GET['branch_id']);
+                    }
+
                 } else {
-                    header("Location:./index.php?user_id =" . $user_id['user_id']);
+                    // header( "Location:./index.php?user_id =" . $user_id['user_id']);
+                    header( "Location:./index.php" );
+
                 }
             }
         } else {

@@ -19,7 +19,7 @@ if (!$user) {
                 break;
             case 'user':
                 $code = 3;
-                break;
+                break; 
         }
     }
     // var_dump($code);

@@ -100,7 +100,7 @@ if (isset($_POST['submit'])) {
         $roleErr = "Please select user role";
         $invalid = false;
     } else if (!preg_match('/^[123]$/', $role)) {
-        $roleErr = "Role must be number";
+        $roleErr = "Role must be number and and select role only in select box";
         $invalid = false;
     }
     if ($invalid) {

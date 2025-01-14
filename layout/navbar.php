@@ -101,7 +101,9 @@ if (isset($_COOKIE['user'])) {
                             <?php } ?>
 
                         <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="profileDropdown">
+                            <?php if($currentUser['user_name'] != "admin"){ ?>
                             <li><a class="dropdown-item" href="../user/profile.php">Profile</a></li>
+                            <?php } ?>
                             <li>
                                 <button class="dropdown-item btn" type="submit" name="logout">Logout</button>
                             </li>

@@ -23,18 +23,25 @@
 <script src="../assets/js/bootstrap.min.js"></script>
 <script src="../assets/js/jquery.min.js"></script>
 <script>
-  
     let deleteUser = $(".deleteUser");
     let deleteBtn = $("#deleteBtn");
     let closeBtn = $("#closeBtn");
+    let deleteKey = null;
     deleteUser.on("click", function(e) {
         deleteKey = e.currentTarget.getAttribute("data-value");
-        console.log(deleteKey);
+        console.log("Value of deleteKey from deleteUser click:", deleteKey);
+        key = deleteKey;
     })
     deleteBtn.on("click", () => {
-        location.replace("?deleteId=" + deleteKey);
-        closeBtn.click();
-    })
+        console.log("Value of deleteKey in deleteBtn click:", deleteKey);
+       if(key == deleteKey){
+            location.replace("?deleteId=" + key);
+            closeBtn.click();
+        } else {
+            location.replace("?deleteError=" + deleteKey);
+            closeBtn.click();
+        }
+    });
 </script>
 </body>
 </html>

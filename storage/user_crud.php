@@ -65,7 +65,6 @@ function update_user($mysqli, $userName, $userEmail, $password, $profile, $role,
         return $mysqli->query($sql);
     } catch (Exception $e) {
         return $e->getMessage();
-
     }
 }
 
@@ -119,7 +118,6 @@ function delete_user($mysqli, $deleteId)
         $sql = "DELETE FROM `user` WHERE `user_id` = $deleteId";
         return $mysqli->query($sql);
     } catch (Exception $e) {
-        // return $e->getMessage();
         return "Internal server error";
     }
 }

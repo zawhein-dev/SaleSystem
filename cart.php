@@ -65,33 +65,57 @@ if (isset($_GET['minus'])) {
 }
 if (isset($_GET['order'])) {
     if (!isset($_COOKIE['user'])) {
-        header("Location:./register.php?order");
+        header("Location:./register.php?order&branch_id=".$branch_id);
     } else if (isset($_COOKIE['user'])) {
         // Decode the JSON string into a PHP associative array
         $userData = json_decode($_COOKIE['user'], associative: true);
         $user_id = $userData['user_id'];
-        // var_dump($user_id);
-        // $currentUser =   get_user_with_id($mysqli, $user_id);
-        
-        if (save_order_product($mysqli, $user_id)) {
-            $order_product_id = get_last_order_product_id($mysqli);
-            $item_array =  $_SESSION["item_list"];
-            foreach ($item_array as $index => $item) {
-                $current_branch_id = $item['branch_id'];
-                $current_product_id = $item['product_id'];
-                $current_branch_product = get_branch_product_for_order_detail($mysqli, $current_product_id, $current_branch_id);
-                if($current_branch_product['qty'] == 0){
-                  array_splice($item_array, $index, 1);
-                }else{
-                  $total = $item['qty'] * $item['price'];
-                  save_order_detail($mysqli, $order_product_id['order_product_id'], $item['branch_product_id'], $item['qty'], $total);
-                  update_qty_when_order_success($mysqli, $item['qty'], $item['branch_product_id']);
+        $index = 0;
+        $excuteQuery = true; // Default value for $excuteQuery
+        $item_count = count($item_array); // Total number of items in the array
+
+        while ($index < $item_count) {
+        $item = $item_array[$index]; // Access the current item
+        $current_branch_id = $item['branch_id'];
+        $current_product_id = $item['product_id'];
+        $current_branch_product = get_branch_product_for_order_detail($mysqli, $current_product_id, $current_branch_id);
+
+        if ($current_branch_product['qty'] == 0) {
+            $excuteQuery = false; 
+            break;
+        }
+
+        $index++; // Move to the next item
+        }
+
+        if($excuteQuery == true){
+            if (save_order_product($mysqli, $user_id)) {
+                $order_product_id = get_last_order_product_id($mysqli);
+                $item_array =  $_SESSION["item_list"];
+                foreach ($item_array as $index => $item) {
+                    $current_branch_id = $item['branch_id'];
+                    $current_product_id = $item['product_id'];
+                    $current_branch_product = get_branch_product_for_order_detail($mysqli, $current_product_id, $current_branch_id);
+                    if($current_branch_product['qty'] == 0){
+                    array_splice($item_array, $index, 1);
+                    }else{
+                    $total = $item['qty'] * $item['price'];
+                    save_order_detail($mysqli, $order_product_id['order_product_id'], $item['branch_product_id'], $item['qty'], $total);
+                    update_qty_when_order_success($mysqli, $item['qty'], $item['branch_product_id']);
+                    }
                 }
+                unset($_SESSION["item_list"]);
+                session_destroy();
+                // header("Location:./home.php?user_id =" . $user_id);
+                header("Location:./home.php");
+
             }
+        } else{
             unset($_SESSION["item_list"]);
             session_destroy();
-            header("Location:./home.php?user_id =" . $user_id);
+            header("Location:select_shop.php?orderByOther&branch_id=".$branch_id);
         }
+
     }
 }
 ?>
@@ -232,7 +256,7 @@ if (isset($_GET['order'])) {
                             </div>
                         </div>
                         <div class="card-footer text-center">
-                            <a href="?order" class="btn w-75 btn-success">Order</a>
+                            <a href="?order&branch_id=<?= $branch_id ?>" class="btn w-75 btn-success">Order</a>
                         </div>
                     </div>
                 </div>

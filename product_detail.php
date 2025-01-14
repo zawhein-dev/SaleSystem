@@ -28,11 +28,12 @@ if (isset($_GET['product_id'])) {
     $branch_product = get_branch_product_for_order_detail($mysqli, $product_id, $branch_id);
 }
 if (isset($_POST['checkout'])) {
+    $qty = $_POST['qty'];
+    $product_post_id = $_POST['product_id'];
+    $branch_post_id = $_POST['branch_id'];
     if ($_POST['currentBranchProductQty'] != 0) {
-        $qty = $_POST['qty'];
-        $product_post_id = $_POST['product_id'];
-        $branch_post_id = $_POST['branch_id'];
         $branch_product = get_branch_product_for_order_detail($mysqli, $product_post_id, $branch_post_id);
+        if(!($qty > $branch_product['qty'])){
         $item_array = [];
         if (isset($_SESSION["item_list"])) {
             $item_array = $_SESSION['item_list'];
@@ -44,21 +45,38 @@ if (isset($_POST['checkout'])) {
                 // $item_array[$i]['qty']++;
             }
         }
-
         if ($isHave) {
-            array_push($item_array, ['product_id' => $branch_product['product_id'], 'branch_product_id' => $branch_product['branch_product_id'], 'product_name' => $branch_product['product_name'], 'price' => $branch_product['price'], 'branch_name' => $branch_product['branch_name'], 'qty' => $qty]);
+            array_push($item_array, ['product_id' => $branch_product['product_id'], 'branch_product_id' => $branch_product['branch_product_id'], 'product_name' => $branch_product['product_name'], 'price' => $branch_product['price'], 'branch_name' => $branch_product['branch_name'], 'qty' => $qty,'branch_id' => $branch_product['branch_id']]);
         }
 
         $_SESSION["item_list"] = $item_array;
         if (!isset($_COOKIE['user'])) {
-            header("Location:./register.php?order");
+            header("Location:./register.php?order&branch_id=" . $branch_id );
         } else if (isset($_COOKIE['user'])) {
             $userData = json_decode($_COOKIE['user'], associative: true);
             $user_id = $userData['user_id'];
-            //     // $currentUser =   get_user_with_id($mysqli, $user_id);
+            $item_array =  $_SESSION["item_list"];
+            $index = 0;
+            $excuteQuery = true; // Default value for $excuteQuery
+            $item_count = count($item_array); // Total number of items in the array
+    
+            while ($index < $item_count) {
+            $item = $item_array[$index]; // Access the current item
+            $current_branch_id = $item['branch_id'];
+            $current_product_id = $item['product_id'];
+            $current_branch_product = get_branch_product_for_order_detail($mysqli, $current_product_id, $current_branch_id);
+    
+            if ($current_branch_product['qty'] == 0) {
+                $excuteQuery = false; 
+                break;
+            }
+    
+            $index++; // Move to the next item
+            }
+            if($excuteQuery == true){
             if (save_order_product($mysqli, $user_id)) {
                 $order_product_id = get_last_order_product_id($mysqli);
-                $item_array =  $_SESSION["item_list"];
+               
                 foreach ($item_array as $index => $item) {
                     $total = $item['qty'] * $item['price'];
                     save_order_detail($mysqli, $order_product_id['order_product_id'], $item['branch_product_id'], $item['qty'], $total);
@@ -67,8 +85,19 @@ if (isset($_POST['checkout'])) {
                 unset($_SESSION["item_list"]);
                 session_destroy();
                 header("Location:./home.php?user_id =" . $user_id);
-            }
+            } 
+        } else{
+            unset($_SESSION["item_list"]);
+            session_destroy();
+            header("Location:select_shop.php?orderByOther&branch_id=".$branch_id);
         }
+
+
+        }
+        } 
+        // else{
+        //     header("location:cart.php?branch_id=".$branch_post_id);
+        // }
     }
 }
 if (isset($_POST['submit'])) {
@@ -227,7 +256,6 @@ if (isset($_POST['submit'])) {
         qty = document.getElementById("qty");
         minus = document.getElementById('minus');
         plus.addEventListener("click", () => {
-            // if (qty_in_branch != qty.value) {
             if ($currentBranchProductQty.value > qty.value) {
                 qty.value++;
             }

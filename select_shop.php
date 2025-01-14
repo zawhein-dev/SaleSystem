@@ -311,6 +311,14 @@ if (isset($_GET['category_id'])) {
          </div>
           <?php  }else{?>
     <div class="col-12 col-lg-9 p-3">
+    <?php if (isset($_GET['orderByOther'])) { ?>
+                    <div id="autoCloseAlert" class="alert alert-warning alert-dismissible fade mx-auto show w-100" role="alert">
+                        <strong>While you are adding product to cart, the product are order by other one.So add the product back and order quickly</strong>
+                        <button type="button" class=" btn-close close" data-bs-dismiss="alert" aria-label="Close">
+                        </button>
+                    </div>
+                    <?php } ?>
+      
       <div class="row row-cols-1 row-cols-md-4 g-4">
         <?php
         while ($product = $product_in_branch->fetch_assoc()) { ?>
@@ -464,6 +472,15 @@ if (isset($_GET['category_id'])) {
         });
       });
     });
+    setTimeout(function () {
+        var alertBox = document.getElementById('autoCloseAlert');
+        if (alertBox) {
+            alertBox.classList.remove('show');
+            setTimeout(function () {
+                alertBox.remove();
+            }, 150);
+        }
+    }, 2000); 
   </script>
   <script src="./assets/js/bootstrap.min.js"></script>
   <script src="./assets/js/jquery.min.js"></script>
